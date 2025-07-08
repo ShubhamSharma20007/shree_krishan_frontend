@@ -16,7 +16,7 @@ const AgGridTable: React.FC<AgGridTableProps> = ({ cols, rows,loading }) => {
 
   return (
     
-    <div className="ag-theme-alpine grid-wrapper capitalize" style={{ height: '100%', width: '100%' }}>
+    <div className="ag-theme-alpine grid-wrapper capitalize h-[calc(100vh-185px)]" style={{ width: '100%' }}>
       <AgGridReact
       colResizeDefault='shift'
         loading={loading}
@@ -24,7 +24,9 @@ const AgGridTable: React.FC<AgGridTableProps> = ({ cols, rows,loading }) => {
         columnDefs={cols}
          rowHeight={60}  
          domLayout='autoHeight'
-
+         pagination
+        //  paginationAutoPageSize
+        //  noRowsOverlayComponent='No data to display'
       />
     </div>
   );

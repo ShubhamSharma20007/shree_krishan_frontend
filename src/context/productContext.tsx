@@ -10,6 +10,7 @@ import React, {
 
 import { useFetch } from "@/hooks/useFetch";
 import ProductServiceInstance from "../../service/product.service";
+import { VITE_BASE_URL } from "@/helper/instance";
 
 // Define your Product type
 type ProductType = {
@@ -56,13 +57,13 @@ export const ProductContextProvider = ({ children }: { children: ReactNode }) =>
         Name: item.itemName,
         Model: item.model,
         Brand: item.brand?.brandName || '',
-        Image: item.images?.pop() || '',
+        Image:`${VITE_BASE_URL}/uploads/${item.images?.[0] || ''}`,
         Description: item.description,
         'Created On': new Date(item.createdAt),
       })).filter(item => !item.isDeleted);
       setProducts(formattedData.reverse());
     }
-  }, [getProductsRes]);
+  }, [getProductsRes])
 
   return (
     <ProductContext.Provider value={[products, setProducts, loading, error ?? null]}>

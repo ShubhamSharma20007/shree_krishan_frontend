@@ -17,6 +17,12 @@
   border: none !important;
 } */
 
+/* Styling for the active NavLink */
+.active {
+  font-weight: 500;
+  background-color: rgb(248, 246, 246);
+}
+
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);

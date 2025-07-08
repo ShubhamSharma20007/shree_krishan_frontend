@@ -73,8 +73,9 @@ const [deleteId,setDeleteId] = useState('')
       },[])
 
       useEffect(()=>{
+          
         if(getProductPartsRes){
-          const result = getProductPartsRes.map((item:any)=>{
+          const result = getProductPartsRes?.productParts.map((item:any)=>{
             return{
               ...item,
               ItemName:item?.productId?.itemName,
@@ -218,6 +219,7 @@ const [selectedProductId, setSelectedProductId] = useState('');
     }
   };
 
+  console.log(createProductPartRes)
 useEffect(() => {
   if (createProductPartRes) {
     setParts((prev: any) => [
@@ -485,7 +487,7 @@ useEffect(() => {
 
 
   return (
-   <div className="h-screen w-full p-3">
+   <div className=" w-full p-3">
       <div className="flex justify-between items-center my-6">
         <h1 className="text-2xl font-semibold">Product Part List</h1>
         <AddProductPartdDialog/>

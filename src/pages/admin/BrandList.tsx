@@ -205,8 +205,6 @@ const { fn:deleteBrandsFn, data: deleteBrandsRes, loading:deleteBrandsLoading } 
     fetchBrands();
   }, []);
 
-  console.log(getBrandsRes);
-  
 
 
 
@@ -285,7 +283,7 @@ const ActionButtons = (params: CustomCellRendererProps) => (
      const result = getBrandsRes.map((brand: any) => ({
       ...brand,
         Name: brand.brandName,
-        Image: brand.image,
+        Image:`${VITE_BASE_URL}/uploads/${brand.image || ''}`,
         'Created On': new Date(brand.createdAt),
       })).filter((b:any)=> !b.isDeleted)
       console.log(result)
@@ -316,7 +314,7 @@ const ActionButtons = (params: CustomCellRendererProps) => (
   ];
 
   return (
-    <div className="h-screen w-full p-3">
+    <div className=" w-full p-3">
       {selectedBrand && (
   <UpdateBrandDialog
     open={isUpdateOpen}

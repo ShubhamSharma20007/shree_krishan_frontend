@@ -214,7 +214,7 @@ const [showHandleDelete,setShowHandleDelete] = useState(false)
 const [deleteId,setDeleteId] = useState('')
   useEffect(() => {
     if (productRes) {
-     
+
       setProducts((prev) => [
         {
           Name: productRes.itemName,
@@ -230,6 +230,7 @@ const [deleteId,setDeleteId] = useState('')
     }
   }, [productRes, setProducts]);
 
+  
 
   const AddProductDialog = () => {
     const { fn: getBrands, data: brandRes } = useFetch(BrandServiceInstance.getAllBrand);
@@ -450,7 +451,7 @@ const [deleteId,setDeleteId] = useState('')
   ];
 
   return (
-    <div className="h-screen w-full p-3">
+    <div className=" w-full p-3">
 {selectedProduct && (
   <UpdateProductDialog
     open={isUpdateOpen}

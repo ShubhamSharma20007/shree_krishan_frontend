@@ -15,6 +15,8 @@ import Listing from './pages/admin/Listing'
 import { useEffect } from 'react'
 import BrandList from './pages/admin/BrandList'
 import ProductPartList from './pages/admin/ProductPartList'
+import Inventory from './pages/admin/Inventory'
+import Report from './pages/admin/Report'
 
 export const App = () => {
   const {pathname} = useLocation()
@@ -47,6 +49,8 @@ export const App = () => {
         <Route path='listing' element={<Listing/>}/>
         <Route path='brandlist' element={<BrandList/>}/>
         <Route path='product-part-list' element={<ProductPartList/>}/>
+        <Route path='inventory' element={<Inventory/>}/>
+        <Route path='report' element={<Report/>}/>
         </Route>
         <Route path='/login' element={<Login/>}/>
         <Route path='*' element={<Dashboard />} />

@@ -20,6 +20,9 @@ class ProductPartService {
    deleteProductPart(id:string): Promise<any>{
     return instance.put('/productPart/'+id+'/delete').then(res=>res.data)
    };
+   getSpecificProductPart(id:string): Promise<any>{
+    return instance.get('/products/'+id).then(res=>res.data?.productParts)
+   }
 
 }
 
