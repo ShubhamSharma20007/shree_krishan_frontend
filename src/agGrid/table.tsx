@@ -1,5 +1,5 @@
 // AgGridTable.tsx
-import React from 'react';
+import React, { useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 
@@ -14,6 +14,10 @@ interface AgGridTableProps {
 
 const AgGridTable: React.FC<AgGridTableProps> = ({ cols, rows,loading }) => {
 
+  const paginationPageSizeSelector = useMemo(() => {
+    return [10, 20, 50, 100];
+  }, []);
+
   return (
     
     <div className="ag-theme-alpine grid-wrapper capitalize h-[calc(100vh-185px)]" style={{ width: '100%' }}>
@@ -22,10 +26,11 @@ const AgGridTable: React.FC<AgGridTableProps> = ({ cols, rows,loading }) => {
         loading={loading}
         rowData={rows}
         columnDefs={cols}
-         rowHeight={60}  
-         domLayout='autoHeight'
+         rowHeight={50}  
+        //  domLayout='autoHeight'
          pagination
-        //  paginationAutoPageSize
+         paginationPageSizeSelector={paginationPageSizeSelector}
+         paginationPageSize={10}
         //  noRowsOverlayComponent='No data to display'
       />
     </div>

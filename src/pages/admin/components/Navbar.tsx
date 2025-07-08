@@ -6,12 +6,9 @@ import logo1 from '@/assets/logo1.png'
 import logo2 from '@/assets/logo2.png'
 import { Link } from "react-router-dom"
 export default function Component() {
- 
-
-
-
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 sticky z-[1] bg-white shadow top-0">
+      {/* Mobile Side Bar */}
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="lg:hidden">
@@ -28,13 +25,21 @@ export default function Component() {
             <NavLink to="/" className="flex w-full items-center py-2 text-lg font-semibold" >
               Home
             </NavLink>
+            <NavLink to="/admin/product-part-list" className="flex w-full items-center py-2 text-lg font-semibold" >
+              Brand List
+            </NavLink>
             <NavLink to="/admin/listing" className="flex w-full items-center py-2 text-lg font-semibold" >
-              Listing
+              Product List
             </NavLink>
-            <NavLink to="#" className="flex w-full items-center py-2 text-lg font-semibold" >
-              Add Product
+            <NavLink to="/admin/product-part-list" className="flex w-full items-center py-2 text-lg font-semibold" >
+              Product Part List
             </NavLink>
-        
+            <NavLink to="/admin/inventory" className="flex w-full items-center py-2 text-lg font-semibold" >
+              Update Inventory
+            </NavLink>
+            <NavLink to="/admin/report" className="flex w-full items-center py-2 text-lg font-semibold" >
+              Stock Report
+            </NavLink>
           </div>
         </SheetContent>
       </Sheet>
@@ -42,6 +47,7 @@ export default function Component() {
          <img src={logo2} className="text-lg h-20 w-25  font-semibold tracking-tighter" />
         <span className="sr-only">Acme Inc</span>
       </Link>
+      {/* Big Screen NavBar */}
       <nav className="ml-auto hidden lg:flex gap-6">
         {/* <NavLink
           to="/admin"
@@ -77,14 +83,14 @@ export default function Component() {
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
           
         >
-        Inventory
+        Update Inventory
         </NavLink>
          <NavLink
         to="/admin/report" 
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
           
         >
-       Inventory Report
+       Stock Report
         </NavLink>
        
 
