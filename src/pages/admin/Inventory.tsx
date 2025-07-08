@@ -39,6 +39,7 @@ useEffect(()=>{
 },[])
 
 useEffect(() => {
+  console.log(inventory)
   if (getInvRes) {
     const transformedData = getInvRes.map((item: any) => ({
       ...item,
@@ -178,7 +179,7 @@ useEffect(() => {
                   />
                 </div>
 
-                {/* Brand Select */}
+                {/* Product Part Select */}
                 <div>
                   <Label htmlFor="productPartId" className="mb-3">Product Part</Label>
                   <SearchableDropdown

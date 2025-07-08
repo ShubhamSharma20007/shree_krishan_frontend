@@ -8,26 +8,27 @@ import ProductPartServiceInstance from "../../../service/part.service"
 import { useFetch } from '@/hooks/useFetch'
 import ReportServiceInstance from "../../../service/report.service"
 const Report = () => {
-  const [products, _] = useProducts();
+const [products, _] = useProducts();
 const [selectedProduct, setSelectedProduct] = React.useState<any>(null);
 const [selectedPart, setSelectedPart] = React.useState<any>(null);
-        const { fn: getProductPartsFN, data: getProductPartsRes,loading } = useFetch(ProductPartServiceInstance.getProductParts);
-        const { fn: getStockFN, data: getStockRes,loading: getStockLoading } = useFetch(ReportServiceInstance.getStockReport);
-        useEffect(()=>{
+const { fn: getProductPartsFN, data: getProductPartsRes,loading } = useFetch(ProductPartServiceInstance.getProductParts);
+const { fn: getStockFN, data: getStockRes,loading: getStockLoading } = useFetch(ReportServiceInstance.getStockReport);
+useEffect(()=>{
   (async()=>{
     await getProductPartsFN();
   })()
 },[])
-  useEffect(() => {
-  if (selectedProduct?.value && selectedPart?.value) {
-    (async () => {
-      try {
-        await getStockFN(selectedProduct.value, selectedPart.value);
-      } catch (error) {
-        console.log('Error during the create stock report:', error);
-      }
-    })();
-  }
+
+useEffect(() => {
+if (selectedProduct?.value && selectedPart?.value) {
+  (async () => {
+    try {
+      await getStockFN(selectedProduct.value, selectedPart.value);
+    } catch (error) {
+      console.log('Error during the create stock report:', error);
+    }
+  })();
+}
 }, [selectedProduct, selectedPart]);
 
  useEffect(() => {
@@ -40,7 +41,7 @@ const [selectedPart, setSelectedPart] = React.useState<any>(null);
 
 
 
-    const cols = [
+const cols = [
   { headerName: "Product Name", field: "productName", sortable: true, filter: true,flex:1 },
   { headerName: "Product Part Name", field: "productPartName", sortable: true, filter: true,flex:1 },
   { headerName: "Stock Quantity", field: "stockQty", sortable: true, filter: true,flex:1 }

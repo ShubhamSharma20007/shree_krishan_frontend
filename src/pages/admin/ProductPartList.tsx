@@ -177,7 +177,7 @@ async function handleDelete(){
      const colDefs = [
     { field: 'ItemName', headerName: 'Product Name', flex: 3, minWidth: 150, sortable: true, filter: true, floatingFilter: true },
     { field: 'Category', flex: 1, minWidth: 100, sortable: true, filter: true, floatingFilter: true },
-    { field: 'PartName', flex: 1, minWidth: 150, sortable: true, filter: true },
+    { field: 'PartName', flex: 1, minWidth: 150, sortable: true, filter: true, floatingFilter: true },
     { field: 'Image', headerName:'Part Image',flex: 2, maxWidth: 100, cellRenderer: CompanyLogo },
     {
       field: 'Created On',
