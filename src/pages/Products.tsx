@@ -37,6 +37,7 @@ const Products = () => {
   useEffect(() => {
     if (Array.isArray(getProductsRes)) {
       const formattedProducts = getProductsRes.map(item => ({
+        id: item._id,
         brand: item.brand.brandName,
         img: `${VITE_BASE_URL}/uploads/${item.images[0] || ''}`,
         name: item.itemName || '',
@@ -81,7 +82,7 @@ const Products = () => {
           {products.length > 0 ? (
             products.map((item, i) => (
               <div key={i}>
-                <a href={`/accessories/${encodeURIComponent(item.name)}`} className='flex justify-center'>
+                <a href={`/accessories/${item.id}`} className='flex justify-center'>
                   <Card className='h-40 w-40 bg-transparent border-0'>
                     <img src={item.img} alt={item.name} className='w-full h-full rounded-xl object-contain' />
                   </Card>

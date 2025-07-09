@@ -201,7 +201,7 @@ useEffect(() => {
                     className="capitalize"
                     name="productPartId"
                     placeholder="Select Product Part"
-                    options={getSpecificProductPartsRes?.map((item: any) => ({
+                    options={getSpecificProductPartsRes?.productParts?.map((item: any) => ({
                       value: item._id,
                       label: item.partName,
                     }))}
@@ -273,13 +273,13 @@ useEffect(() => {
                       className="capitalize"
                       name={`productPartId-${index + 1}`}
                       placeholder="Select Product Part"
-                      options={getSpecificProductPartsRes?.map((item: any) => ({
+                      options={getSpecificProductPartsRes?.productParts?.map((item: any) => ({
                         value: item._id,
                         label: item.partName,
                       }))}
                       value={
                         getSpecificProductPartsRes
-                          ?.map((item: any) => ({
+                          ?.productParts?.map((item: any) => ({
                             value: item._id,
                             label: item.partName,
                           }))

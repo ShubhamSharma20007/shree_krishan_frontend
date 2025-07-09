@@ -40,9 +40,9 @@ export const App = () => {
       <Suspense fallback={<h1 className="text-center p-6">Loading…</h1>}>
         <Routes>
           <Route path='/' element={<Dashboard />} />
-          <Route path='/searchmodel' element={<Products />} />
+          <Route path='/products' element={<Products />} />
           <Route path='/accessories/:device' element={<SparePartsAndAccessories />} />
-          <Route path='/:device/:accessories/:item' element={<AccessoriesOverview />} />
+          <Route path='/:device/:partdetail/:partId' element={<AccessoriesOverview />} />
           <Route path='/sellproduct' element={<SellProductDashboard />} />
           <Route path='/sellproduct/:device' element={<QuesAns />} />
 

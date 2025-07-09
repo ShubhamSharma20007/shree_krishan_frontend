@@ -106,7 +106,7 @@ const Dashboard = () => {
         {
            brandData.map((item:any, j: number) => (
             <div key={j} className='flex justify-center items-center' >
-             <a href={'/searchmodel?brand='+item.id}>
+             <a href={'/products?brand='+item.id}>
              <Card className='h-40 w-40 bg-transparent border-0 '>
                 <img src={item.image}  alt={item.brandName} className='w-full h-full rounded-xl object-contain ' />
               </Card>
