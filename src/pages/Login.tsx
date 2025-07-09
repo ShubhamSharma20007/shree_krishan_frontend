@@ -9,7 +9,7 @@ export default function Login() {
 
   const handleLogin = () => {
     // Handle login logic here
-    navigate("/admin")
+    navigate("/admin/dashboard")
   }
 
   return (

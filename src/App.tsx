@@ -11,13 +11,24 @@ import SellProductDashboard from './pages/SellProduct'
 import QuesAns from './pages/SellProduct/QuesAns'
 import Login from './pages/Login'
 import Layout from './pages/admin/Layout'
-
+import { ProgressBar } from 'react-loader-spinner';
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'))
 const Listing = lazy(() => import('./pages/admin/Listing'))
 const BrandList = lazy(() => import('./pages/admin/BrandList'))
 const ProductPartList = lazy(() => import('./pages/admin/ProductPartList'))
 const Inventory = lazy(() => import('./pages/admin/Inventory'))
 const Report = lazy(() => import('./pages/admin/Report'))
+
+
+const Loader =()=><div className='min-h-screen flex items-center justify-center w-full'>
+<ProgressBar
+  visible={true}
+  height="80"
+  width="80"
+  ariaLabel="progress-bar-loading"
+  />
+
+</div>
 
 export const App = () => {
   const { pathname } = useLocation()
@@ -37,7 +48,7 @@ export const App = () => {
     <>
       {pathname !== "/login" && !pathname.startsWith('/admin') && <Navbar />}
 
-      <Suspense fallback={<h1 className="text-center p-6">Loading…</h1>}>
+      <Suspense fallback={<Loader/>}>
         <Routes>
           <Route path='/' element={<Dashboard />} />
           <Route path='/products' element={<Products />} />
@@ -47,7 +58,7 @@ export const App = () => {
           <Route path='/sellproduct/:device' element={<QuesAns />} />
 
           <Route path='admin' element={<Layout />}>
-            <Route index element={<AdminDashboard />} />
+            <Route index path='dashboard' element={<AdminDashboard />} />
             <Route path='listing' element={<Listing />} />
             <Route path='brandlist' element={<BrandList />} />
             <Route path='product-part-list' element={<ProductPartList />} />

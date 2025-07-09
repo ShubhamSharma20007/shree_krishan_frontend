@@ -13,13 +13,18 @@ class InventroyService {
     };
     deleteInventoryProduct(id:string):Promise<any>{
         return instance.put('/inventory/'+id+"/delete",).then(res=>res.data)
-    }; 
-    // reportProducts():Promise<any>{
-    //     return instance.get('/inventory/products').then(res=>res.data?.products)
-    // };
-    // populateProducts(productId:string):Promise<any>{
-    //     return instance.get('/inventory/productParts/'+productId).then(res=>res.data?.productParts || res.data)
-    // }
+    };
+    deductProductName():Promise<any>{
+        return instance.get('/inventory/products').then(res=>res.data?.products || res.data)
+    };
+     deductProductPartNameById(productId:string):Promise<any>{
+        return instance.get('/inventory/productParts/'+productId).then(res=>res.data?.productParts || res.data)
+    };
+    calculateStockQuanty(productId:string,productPartId:string):Promise<any>{
+        return instance.post('/inventory/calculateStock',{productId,productPartId}).then(res=>res.data?.productParts || res.data)
+    } 
+
+
 
 
 

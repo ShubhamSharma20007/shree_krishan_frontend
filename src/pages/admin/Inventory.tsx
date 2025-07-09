@@ -469,6 +469,257 @@ useEffect(()=>{
 
 
 
+const DeductInventory = () => {
+  const formRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [productNameState,setProductNameState]=useState({
+    value:'',
+    label:''
+  })
+   const [productPartState,setProductPartState]=useState({
+    value:'',
+    label:''
+  })
+  const [inventoryRows, setInventoryRows] = useState<any>([]);
+
+    const { fn: deductProductFn, data: deductProductRes,loading:deductProductLoading } = useFetch(InventoryServiceInstance.getInventoryProduct);
+        const { fn: deductProductPartNameFn, data: deductProductPartNameRes,loading:deductProductPartNameLoading } = useFetch(InventoryServiceInstance.deductProductPartNameById);
+     const { fn: calculateStockFn, data: calculateStockRes,loading:calculateStockLoading } = useFetch(InventoryServiceInstance.calculateStockQuanty);
+
+  useEffect(()=>{
+    deductProductFn()
+  },[])
+   const specificProductParts =async(value)=>{
+    try {
+      await deductProductPartNameFn(value)
+    } catch (error) {
+      console.log({error})
+      
+    }
+  }
+
+
+  useEffect(()=>{
+    if(productNameState.value.length > 0 && productPartState.value.length > 0){
+      calculateStockFn(productNameState.value,productPartState.value)
+      setProductNameState({value:'',label:''})
+      setProductPartState({value:'',label:''})
+    }
+
+  },[productNameState,productPartState])
+
+
+
+
+
+  const handleClone = () => {
+    setInventoryRows((prev: any) => [
+      ...prev,
+      { productId: "", productPartId: "", qty: "", remark: "" },
+    ]);
+  };
+
+ 
+
+  const updateRow = async(index: number, field: string, value: any) => {
+   
+    setInventoryRows((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+  };
+
+  const removeElement = (idx: number) => {
+    const newRows = [...inventoryRows];
+    newRows.splice(idx, 1);
+    setInventoryRows(newRows);
+  };
+
+
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button onClick={() => setOpen(true)}>Deduct Inventory</Button>
+      </DialogTrigger>
+
+      <DialogContent className="sm:max-w-[80%]">
+        <form className="grid gap-4" ref={formRef} onSubmit={null}>
+          <DialogHeader>
+            <DialogTitle>Deduct Inventory</DialogTitle>
+            <DialogDescription />
+          </DialogHeader>
+
+          <div className="grid gap-3">
+            {/* Initial row */}
+            <div className="flex items-center justify-between gap-3 customDiv">
+              <div className="grid grid-cols-4 gap-4 w-full">
+                {/* Product Select */}
+                <div>
+                  <Label htmlFor="productId" className="mb-3">Product Name</Label>
+                  <SearchableDropdown
+                    className="capitalize"
+                    placeholder="Select Product"
+                    name="productId"
+                    value={productNameState}
+                    options={deductProductRes && deductProductRes.map((item: any) => ({
+                      value: item?.productId?._id,
+                      label: item?.productId?.itemName,
+                    }))}
+                    onChange={(option: any) =>{
+                      specificProductParts(option?.value)
+                      setProductNameState(option)
+                    }
+                    }
+                     
+                  />
+                </div>
+
+                {/* Product Part Select */}
+                <div>
+                  <Label htmlFor="productPartId" className="mb-3">Product Part</Label>
+                  <SearchableDropdown
+                    className="capitalize"
+                    name="productPartId"
+                    placeholder="Select Product Part"
+                    value={productPartState}
+                    options={deductProductPartNameRes && deductProductPartNameRes?.map((item: any) => ({
+                      value: item?._id,
+                      label: item?.partName,
+                    }))}
+                    onChange={(option: any) =>{
+                      setProductPartState(option)
+                    }
+                  }
+   
+                  />
+                  {/* label */}
+                  <span className='inline-block float-end text-xs mt-1 text-green-500'>Available Stock Qty: {calculateStockRes?.stockQuantity || 0}</span>
+                </div>
+
+                <div>
+                  <Label htmlFor="qty" className="mb-3">Quantity</Label>
+                  <Input
+                    id="qty"
+                    name="qty"
+                    type="number"
+                    placeholder="e.g 1"
+                    required
+                    onChange={(e) => updateRow(0, "qty", e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="remark" className="mb-3">Remark</Label>
+                  <Input
+                    id="remark"
+                    name="remark"
+                    placeholder="Remark..."
+                    required
+                    onChange={(e) => updateRow(0, "remark", e.target.value)}
+                  />
+                </div>
+              </div>
+              <PlusCircle className="mt-2 cursor-pointer" onClick={handleClone} />
+            </div>
+
+            {/* Cloned rows */}
+            {inventoryRows.slice(1).map((row, index) => (
+              <div key={index} className="flex items-center justify-between gap-3 customDiv">
+                <div className="grid grid-cols-4 gap-4 w-full">
+                  <div>
+                    <SearchableDropdown
+                      className="capitalize"
+                      placeholder="Select Product"
+                      name={`productId-${index + 1}`}
+                      options={products.map((item: any) => ({
+                        value: item._id,
+                        label: item.itemName,
+                      }))}
+                      value={
+                        products
+                          .map((item: any) => ({
+                            value: item._id,
+                            label: item.itemName,
+                          }))
+                          .find((option) => option.value === row.productId) || null
+                      }
+                      onChange={(option: any) =>{
+                        // specificProductParts(option?.value)
+                        updateRow(index + 1, "productId", option?.value)
+                      }
+                        
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <SearchableDropdown
+                      className="capitalize"
+                      name={`productPartId-${index + 1}`}
+                      placeholder="Select Product Part"
+                      // options={getSpecificProductPartsRes?.map((item: any) => ({
+                      //   value: item._id,
+                      //   label: item.partName,
+                      // }))}
+                      // value={
+                      //   getSpecificProductPartsRes
+                      //     ?.map((item: any) => ({
+                      //       value: item._id,
+                      //       label: item.partName,
+                      //     }))
+                      //     .find((option) => option.value === row.productPartId) || null
+                      // }
+                      onChange={(option: any) =>
+                        updateRow(index + 1, "productPartId", option?.value)
+                      }
+                    />
+                  </div>
+
+                  <div>
+                    <Input
+                      id={`qty-${index + 1}`}
+                      name={`qty-${index + 1}`}
+                      type="number"
+                      placeholder="e.g 1"
+                      required
+                      value={row.qty}
+                      onChange={(e) => updateRow(index + 1, "qty", e.target.value)}
+                    />
+                  </div>
+
+                  <div>
+                    <Input
+                      id={`remark-${index + 1}`}
+                      name={`remark-${index + 1}`}
+                      placeholder="Remark..."
+                      required
+                      value={row.remark}
+                      onChange={(e) => updateRow(index + 1, "remark", e.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <XCircle className="mt-2 cursor-pointer" onClick={() => removeElement(index + 1)} />
+              </div>
+            ))}
+          </div>
+
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+            </DialogClose>
+            <Button type="button" onClick={null} disabled={false}>
+              {false ? <LoaderCircle className="animate-spin" /> : "Create"}
+            </Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 
 function HandleDeleteComponent({
   showHandleDelete,
@@ -580,8 +831,9 @@ function HandleDeleteComponent({
       <div className="flex justify-between items-center my-6">
         <h1 className="text-2xl font-semibold">Inventory</h1>
       {
-       products &&  <AddInventory setInventory={setInventory}/>
+       products && (<div className='flex gap-3 items-center'><AddInventory setInventory={setInventory}/>  <DeductInventory/></div>)
       }
+       
        {isUpdateOpen && selectedInventory && (
   <UpdateInventoryDialog
     open={isUpdateOpen}
@@ -590,6 +842,7 @@ function HandleDeleteComponent({
     products={products}
   />
 )}
+
 
  {selectedInventory && (
   <HandleDeleteComponent

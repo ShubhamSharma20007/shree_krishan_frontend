@@ -6,6 +6,15 @@ import logo1 from '@/assets/logo1.png'
 import logo2 from '@/assets/logo2.png'
 import { Link } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar"
+import { BellIcon } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 export default function Component() {
   const notifications = [
     { id: 1, message: 'New user registered', time: '2 mins ago' },
@@ -13,44 +22,10 @@ export default function Component() {
     { id: 3, message: 'Stock report generated', time: '1 hour ago' },
   ];
 
-  const NotificationDropdown = () => (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger asChild>
-        <Button variant="outline" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-1 right-1 inline-flex h-2 w-2 rounded-full bg-red-500" />
-        </Button>
-      </DropdownMenu.Trigger>
-
-      <DropdownMenu.Portal>
-        <DropdownMenu.Content 
-          side="bottom" 
-          align="end" 
-          sideOffset={8}
-          className="rounded-md bg-white p-3 shadow-lg border w-64 z-[9999]"
-        >
-          <h3 className="text-sm font-semibold mb-2">Notifications</h3>
-          {notifications.length === 0 ? (
-            <p className="text-xs text-gray-500">No new notifications</p>
-          ) : (
-            notifications.map((notif) => (
-              <DropdownMenu.Item
-                key={notif.id}
-                className="px-2 py-1 text-sm cursor-pointer hover:bg-gray-100 rounded"
-              >
-                <div className="font-medium">{notif.message}</div>
-                <div className="text-xs text-gray-400">{notif.time}</div>
-              </DropdownMenu.Item>
-            ))
-          )}
-        </DropdownMenu.Content>
-      </DropdownMenu.Portal>
-    </DropdownMenu.Root>
-  );
 
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 sticky z-[10] bg-white shadow top-0">
-      
+
       {/* Mobile Sidebar */}
       <Sheet>
         <SheetTrigger asChild className="print:hidden">
@@ -72,68 +47,82 @@ export default function Component() {
             <NavLink to="/admin/inventory" className="flex w-full items-center py-2 text-lg font-semibold">Update Inventory</NavLink>
             <NavLink to="/admin/report" className="flex w-full items-center py-2 text-lg font-semibold">Stock Report</NavLink>
 
-            {/* ✅ Mobile Notification */}
-            <div className="mt-4">
-              <NotificationDropdown />
-            </div>
+
           </div>
         </SheetContent>
       </Sheet>
 
-      <Link to="/admin" className="mr-6 hidden lg:flex">
+      <Link to="/admin/dashboard" className="mr-6 hidden lg:flex">
         <img src={logo2} className="text-lg h-20 w-25 font-semibold tracking-tighter" alt="Logo" />
-        <span className="sr-only">Acme Inc</span>
+        <span className="sr-only">Shree Krishna Mobile Store</span>
       </Link>
       {/* Big Screen NavBar */}
       <nav className="ml-auto hidden lg:flex gap-6">
         <NavLink
-          to="/admin"
+          to="/admin/dashboard"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          
+
         >
           Home
         </NavLink>
-      
+
         <NavLink
-        to="/admin/brandlist" 
+          to="/admin/brandlist"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          
+
         >
           Brand List
         </NavLink>
         <NavLink
-        to="/admin/listing" 
+          to="/admin/listing"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          
+
         >
           Product List
         </NavLink>
         <NavLink
-        to="/admin/product-part-list" 
+          to="/admin/product-part-list"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          
+
         >
           Product Part List
         </NavLink>
         <NavLink
-        to="/admin/inventory" 
+          to="/admin/inventory"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          
+
         >
-        Update Inventory
+          Update Inventory
         </NavLink>
-         <NavLink
-        to="/admin/report" 
+        <NavLink
+          to="/admin/report"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          
+
         >
-       Stock Report
+          Stock Report
         </NavLink>
-       
-      <Avatar>
-        <AvatarImage src="https://github.com/shubhamsharma20007.png" />
-        <AvatarFallback>SS</AvatarFallback>
-      </Avatar>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger  >
+            <Button variant="secondary" size="icon" >
+              <div className="relative">
+                <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500" />
+                <BellIcon />
+              </div>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Shubham 👋</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem>Subscription</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Avatar>
+          <AvatarImage src="https://github.com/shubhamsharma20007.png" />
+          <AvatarFallback>SS</AvatarFallback>
+        </Avatar>
       </nav>
     </header>
   );
