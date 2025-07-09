@@ -1,10 +1,11 @@
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
-import { NavLink, Link } from "react-router-dom";
-import logo2 from '@/assets/logo2.png';
-import { Bell } from 'lucide-react';
-import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import { NavLink } from "react-router-dom"
+import logo1 from '@/assets/logo1.png'
+import logo2 from '@/assets/logo2.png'
+import { Link } from "react-router-dom"
+import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar"
 export default function Component() {
   const notifications = [
     { id: 1, message: 'New user registered', time: '2 mins ago' },
@@ -52,7 +53,7 @@ export default function Component() {
       
       {/* Mobile Sidebar */}
       <Sheet>
-        <SheetTrigger asChild>
+        <SheetTrigger asChild className="print:hidden">
           <Button variant="outline" size="icon" className="lg:hidden">
             <MenuIcon className="h-6 w-6" />
             <span className="sr-only">Toggle navigation menu</span>
@@ -83,18 +84,56 @@ export default function Component() {
         <img src={logo2} className="text-lg h-20 w-25 font-semibold tracking-tighter" alt="Logo" />
         <span className="sr-only">Acme Inc</span>
       </Link>
-
-      {/* Big Screen Navbar */}
-      <nav className="ml-auto hidden lg:flex gap-6 items-center">
-        <NavLink to="/admin" className="group inline-flex h-9 items-center px-4 text-sm font-medium hover:bg-gray-100">Home</NavLink>
-        <NavLink to="/admin/brandlist" className="group inline-flex h-9 items-center px-4 text-sm font-medium hover:bg-gray-100">Brand List</NavLink>
-        <NavLink to="/admin/listing" className="group inline-flex h-9 items-center px-4 text-sm font-medium hover:bg-gray-100">Product List</NavLink>
-        <NavLink to="/admin/product-part-list" className="group inline-flex h-9 items-center px-4 text-sm font-medium hover:bg-gray-100">Product Part List</NavLink>
-        <NavLink to="/admin/inventory" className="group inline-flex h-9 items-center px-4 text-sm font-medium hover:bg-gray-100">Update Inventory</NavLink>
-        <NavLink to="/admin/report" className="group inline-flex h-9 items-center px-4 text-sm font-medium hover:bg-gray-100">Stock Report</NavLink>
-
-        {/* ✅ Big Screen Notification */}
-        <NotificationDropdown />
+      {/* Big Screen NavBar */}
+      <nav className="ml-auto hidden lg:flex gap-6">
+        <NavLink
+          to="/admin"
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          
+        >
+          Home
+        </NavLink>
+      
+        <NavLink
+        to="/admin/brandlist" 
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          
+        >
+          Brand List
+        </NavLink>
+        <NavLink
+        to="/admin/listing" 
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          
+        >
+          Product List
+        </NavLink>
+        <NavLink
+        to="/admin/product-part-list" 
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          
+        >
+          Product Part List
+        </NavLink>
+        <NavLink
+        to="/admin/inventory" 
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          
+        >
+        Update Inventory
+        </NavLink>
+         <NavLink
+        to="/admin/report" 
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          
+        >
+       Stock Report
+        </NavLink>
+       
+      <Avatar>
+        <AvatarImage src="https://github.com/shubhamsharma20007.png" />
+        <AvatarFallback>SS</AvatarFallback>
+      </Avatar>
       </nav>
     </header>
   );
