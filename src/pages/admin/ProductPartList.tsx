@@ -42,15 +42,14 @@ import SearchableDropdown from 'react-select'
 import { useProducts } from '@/context/productContext';
 
 const categoryOptions = [
-  { value: "Display", label: "Display" },
+  { value: "Display & Screens", label: "Display & Screens" },
+  { value: "Body & Housings", label: "Body & Housings" },
   { value: "Battery", label: "Battery" },
-  { value: "Camera", label: "Camera" },
-  { value: "Motherboard", label: "Motherboard" },
-  { value: "Speaker", label: "Speaker" },
-  { value: "Charging Port", label: "Charging Port" },
+  { value: "Internal Components", label: "Internal Components" },
+  { value: "Repairing Tools", label: "Repairing Tools" },
+  { value: "Accessories", label: "Accessories" },
+  { value: "Others", label: "Others" },
 ];
-
-
 
 
 const ProductPartList = () => {

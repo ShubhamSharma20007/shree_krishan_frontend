@@ -17,7 +17,6 @@ const parts = [
     images: [
       { img: 'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/150/150/detailed/3217/replacement_front_glass_for_samsung_galaxy_s10_black_by_maxbhi_com_16694.jpg?t=1731769454', title: 'Front Glass Only' },
       { img: 'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/150/150/detailed/3217/lcd_with_touch_screen_for_samsung_galaxy_s10_black_by_maxbhi_com_97605.jpg?t=1731769454', title: 'Display Combo Folder' },
-   
     ]
   },
   {
@@ -26,16 +25,12 @@ const parts = [
       { img: 'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/150/150/detailed/3217/back_panel_cover_for_samsung_galaxy_s10_black_maxbhi_com_15441.jpg?t=1731769455', title: 'Back Cover Panel' },
       { img: 'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/150/150/detailed/5284/camera_lens_for_samsung_galaxy_s10_black_by_maxbhi_com_22813.jpg?t=1731792150', title: 'Camera Lens' },
       { img: 'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/150/150/detailed/4464/volume_side_button_outer_for_samsung_galaxy_s10_black_by_maxbhi_com_73520.jpg?t=1739591930', title: 'Volume Button Outer' },
-      
-   
     ]
   },
    {
     title: 'Battery',
     images: [
       { img: 'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/150/150/detailed/3217/battery_for_samsung_galaxy_s10_plus_by_maxbhi_com_36070.jpg?t=1731769498', title: 'Back Battery' },
-     
-   
     ]
   },
   
@@ -50,7 +45,6 @@ const SparePartsAndAccessories = () => {
           <BreadcrumbItem>
             <BreadcrumbLink href="/">Home</BreadcrumbLink>
           </BreadcrumbItem>
-         
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage className='capitalize'>{device}</BreadcrumbPage>

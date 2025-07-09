@@ -1,17 +1,15 @@
-
-
-
+import React, { useEffect, useState } from 'react'
 import ImageContainer from '@/components/ImageContainer'
 import { Button } from '@/components/ui/button'
-import {
-  Card,
-
-} from "@/components/ui/card"
+import {Card} from "@/components/ui/card"
 import { useNavigate } from 'react-router-dom'
   const images = [
     { image: 'https://d57avc95tvxyg.cloudfront.net/images/promo/3905/Banner_1200_x_300.png?t=1575723598' },
     { image: 'https://d57avc95tvxyg.cloudfront.net/images/promo/3901/maxbhi_search_banner.jpg?t=1575619456' }
   ]
+import { useFetch } from '@/hooks/useFetch';
+import BrandServiceInstance from '../../service/brand.service';
+import { VITE_BASE_URL } from '@/helper/instance'
 
   // const parts = [
   //   {
@@ -56,23 +54,40 @@ import { useNavigate } from 'react-router-dom'
   //   }
   // ]
 
-  const brands =[
-   {brand:'samsung',img: "https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3892/Samsung_by_maxbhi_67to-l2.jpeg?t=1731769244"},
-    {brand:'vivo',img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/Vivo_by_maxbhi.jpeg?t=1731769244"},
-    {brand:"xiaomi",img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/Xiaomi_by_maxbhi.jpeg?t=1731769244"},
-  {brand:'apple',img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/Apple_by_maxbhi.jpeg?t=1731769244"},
-    {brand:'realme',img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/Realme_by_maxbhi.jpeg?t=1731769244"},
-    {brand:'oppo',img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/Oppo_by_maxbhi.jpeg?t=1731769244"},
-    {brand:'motorola',img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/Motorola_e1e2-sv.jpg?t=1731769244"},
-    {brand:'oneplus',img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/1280px-OnePlus_logo.svg.png?t=1731769244"},
-    {brand:'lg',img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/LG-Logo.png?t=1731769245"},
-    {brand:"nokia",img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/100/feature_variant/3893/Nokia_by_maxbhi.jpeg?t=1731769244"}
-
-  ]
-
-
 const Dashboard = () => {
+  const [loading, setLoading] = useState(false);
+  const [brandData, setBrandData] = React.useState<any>([]);
+  const { fn:getBrandsFn, data: getBrandsRes, loading:getBrandsLoading } = useFetch(BrandServiceInstance.getAllBrand);
+  const fetchBrands = async () => {
+    setLoading(true);
+    try {
+    await getBrandsFn()
+    } catch (error) {
+      console.error("Error fetching brands:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBrands();
+  }, []);
+
+  useEffect(() => {
+    if (Array.isArray(getBrandsRes)) {
+      const formattedBrands = getBrandsRes.map(brand => ({
+        id: brand._id,
+        brandName: brand.brandName,
+        image: `${VITE_BASE_URL}/uploads/${brand.image || ''}`,
+      }));
+      setBrandData(formattedBrands);
+    } else {
+      setBrandData([]);
+    }
+  }, [getBrandsRes]);
+
   const navigate = useNavigate()
+
   return (
      <>
     {/* sell buton */}
@@ -89,11 +104,11 @@ const Dashboard = () => {
         <h1 className='text-3xl font-bold  text-foreground my-10 capitalize text-center'>Select Mobile Phone Brand</h1>
       <div className='grid  grid-cols-2 container mx-auto sm:grid-cols-4 md:grid-cols-5 gap-4 '>
         {
-           brands.map((item:any, j: number) => (
+           brandData.map((item:any, j: number) => (
             <div key={j} className='flex justify-center items-center' >
-             <a href={'/searchmodel/'+item.brand}>
+             <a href={'/searchmodel?brand='+item.id}>
              <Card className='h-40 w-40 bg-transparent border-0 '>
-                <img src={item.img.trim()}  alt={item.brand} className='w-full h-full rounded-xl object-contain ' />
+                <img src={item.image}  alt={item.brandName} className='w-full h-full rounded-xl object-contain ' />
               </Card>
               </a>
             </div>

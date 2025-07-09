@@ -39,7 +39,7 @@ export const App = () => {
       }
       <Routes>
         <Route path='/' element={<Dashboard />} />
-        <Route path='/searchmodel/:brand' element={<Products />} />
+        <Route path='/searchmodel' element={<Products />} />
         <Route path='/accessories/:device' element={<SparePartsAndAccessories />} />
         <Route path='/:device/:accessories/:item' element={<AccessoriesOverview />} />
         <Route path='/sellproduct' element={<SellProductDashboard />} />
