@@ -22,6 +22,9 @@ class InventroyService {
     };
     calculateStockQuanty(productId:string,productPartId:string):Promise<any>{
         return instance.post('/inventory/calculateStock',{productId,productPartId}).then(res=>res.data?.productParts || res.data)
+    };
+    deductInventory(items:any[]){
+        return instance.post('/inventory/deduct',items).then(res=>res.data)
     } 
 
 
