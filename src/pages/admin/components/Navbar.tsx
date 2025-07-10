@@ -2,7 +2,6 @@
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { NavLink } from "react-router-dom"
-import logo1 from '@/assets/logo1.png'
 import logo2 from '@/assets/logo2.png'
 import { Link } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar"
@@ -15,12 +14,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useFetch } from '@/hooks/useFetch';
+import NotificationServiceInstance from '../../../../service/notification.service';
+import { useEffect, useState } from 'react';
 export default function Component() {
-  const notifications = [
-    { id: 1, message: 'New user registered', time: '2 mins ago' },
-    { id: 2, message: 'Inventory updated', time: '10 mins ago' },
-    { id: 3, message: 'Stock report generated', time: '1 hour ago' },
-  ];
+  const { fn: getNotificationFn, data: getNotificationRes, loading: notificationLoading } = useFetch(NotificationServiceInstance.getNotification);
+  const [notifications, setNotifications] = useState([]);
+
+  useEffect(() => {
+    getNotificationFn();
+  }, []);
+
+  useEffect(() => {
+    if (getNotificationRes && Array.isArray(getNotificationRes)) {
+      setNotifications(getNotificationRes);
+    }
+  }, [getNotificationRes]);
+
+
 
 
   return (
@@ -102,22 +113,39 @@ export default function Component() {
           Stock Report
         </NavLink>
 
+        {/* Notifications */}
         <DropdownMenu>
-          <DropdownMenuTrigger  >
-            <Button variant="secondary" size="icon" >
+          <DropdownMenuTrigger>
+            <Button variant="secondary" size="icon">
               <div className="relative">
-                <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500" />
+                {notifications.length > 0 && (
+                  <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500" />
+                )}
                 <BellIcon />
               </div>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuLabel>Shubham 👋</DropdownMenuLabel>
+          <DropdownMenuContent className="w-64 max-h-80 overflow-y-auto">
+            <DropdownMenuLabel>Stock Alert Notifications 🔔</DropdownMenuLabel>
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            {notifications.length > 0 ? (
+          notifications.map((alert, index) => (
+            <DropdownMenuItem key={index} className="flex flex-col items-start">
+              <span className="text-sm font-medium capitalize">
+                {alert.productName} - {alert.productPartName}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                Stock Left: {alert.stockQty}
+              </span>
+            </DropdownMenuItem>
+          ))
+        ) : (
+              <DropdownMenuItem>No new notifications</DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
+
 
         <Avatar>
           <AvatarImage src="https://github.com/shubhamsharma20007.png" />
