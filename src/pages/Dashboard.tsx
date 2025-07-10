@@ -91,9 +91,9 @@ const Dashboard = () => {
   return (
      <>
     {/* sell buton */}
-    <div className='container mx-auto place-content-center flex'> 
+    {/* <div className='container mx-auto place-content-center flex'> 
       <Button onClick={()=>navigate('/sellproduct')} variant={'default'} className=' mt-5 mb-5'>Sell Your Mobile</Button>
-    </div>
+    </div> */}
     <div className='p-3 md:p-0'>
       {/* image Container */}
       {
@@ -116,6 +116,91 @@ const Dashboard = () => {
         }
         </div>
       </div>
+        {/* SPARE PARTS SECTION */}
+      <div className="mt-20 container  mx-auto px-4">
+        <h2 className="text-2xl font-bold text-center mb-8">Find Genuine Spare Parts</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+          {[
+            {
+              title: "Battery",
+              img: "/src/assets/battery.jpg"
+            },
+            {
+              title: "Screen",
+              img: "/src/assets/screen.jpg"
+            },
+            {
+              title: "Accessories",
+              img: "/src/assets/accessories.jpg"
+            },
+            {
+              title: "Internal Parts",
+              img: "/src/assets/parts.png"
+            }
+          ].map((part, index) => (
+            <Card key={index} className="p-4 text-center shadow-md rounded-xl bg-white dark:bg-zinc-900">
+              <img
+                src={part.img}
+                alt={part.title}
+                className="w-full h-50 object-cover  rounded-xl"
+              />
+              <button
+      className="bg-black text-white dark:bg-white dark:text-black font-semibold px-6 py-2 rounded-xl"
+    >
+      {part.title}
+    </button>
+
+            </Card>
+          ))}
+        </div>
+      </div>
+
+        {/* HOW TO SEARCH SECTION */}
+  <div className="mt-20 container mx-auto px-4">
+  <h2 className="text-3xl font-bold text-center mb-10 text-foreground">
+    How to Search for Your Product
+  </h2>
+
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {/* Step 1 */}
+    <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700 text-center">
+      <img
+        src='/src/assets/brand.png'
+        alt="Select Brand"
+        className="h-16 w-16 mx-auto mb-4 "
+      />
+      <h3 className="text-xl font-semibold mb-2">1. Select Brand</h3>
+      <p className="text-sm text-muted-foreground">
+        Choose the brand of the handset you're looking for. Use the search box or alphabet if it's not listed.
+      </p>
+    </div>
+
+    {/* Step 2 */}
+    <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700 text-center">
+      <img
+        src='/src/assets/mobile.png'
+        alt="Select Model"
+        className="h-16 w-16 mx-auto mb-4"
+      />
+      <h3 className="text-xl font-semibold mb-2">2. Select Model</h3>
+      <p className="text-sm text-muted-foreground">
+        After selecting the brand, pick your handset model. Use the search if you don’t find it directly.
+      </p>
+    </div>
+
+    {/* Step 3 */}
+    <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700 text-center">
+      <img
+        src='/src/assets/parts.png'
+        alt="Select Product Type"
+        className="h-16 w-16 mx-auto mb-4"
+      />
+      <h3 className="text-xl font-semibold mb-2">3. Select Product Type</h3>
+      <p className="text-sm text-muted-foreground">
+        View all available products for your model and select the part you need.
+      </p>
+    </div>
+  </div>
       {/* cards */}
       {/* <div className='px-2  mt-20 container mx-auto'>
         {
@@ -144,6 +229,7 @@ const Dashboard = () => {
      
       
       
+    </div>
     </div>
      </>
   )

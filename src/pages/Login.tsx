@@ -13,7 +13,7 @@ export default function Login() {
   const { fn: userLoginFn, data: loginRes, loading } = useFetch(LoginServiceInstance.userLogin);
   const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(formRef.current as HTMLFormElement);
     const data = Object.fromEntries(formData.entries());
@@ -26,15 +26,12 @@ export default function Login() {
 
   useEffect(() => {
     if (loginRes) {
+      console.log(loginRes)
       toast.success("Login successfully");
       formRef.current?.reset();
+      navigate("/admin/dashboard");
     }
   }, [loginRes]);
-
-  const handleLogin = () => {
-    // Implement login logic here
-    navigate("/admin/dashboard");
-  };
 
   return (
     <div
@@ -64,12 +61,13 @@ export default function Login() {
             </CardHeader>
 
             <CardContent>
-              <form className="space-y-6">
+              <form className="space-y-6" ref={formRef} onSubmit={handleLogin}>
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-sm text-gray-700">Email</Label>
                   <Input
                     id="email"
                     type="email"
+                    name="email"
                     placeholder="Enter you email address here"
                     required
                     className="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
@@ -81,6 +79,7 @@ export default function Login() {
                   <Input
                     id="password"
                     type="password"
+                    name="password"
                     placeholder="Enter your password here"
                     required
                     className="border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
@@ -93,7 +92,6 @@ export default function Login() {
 
                 <Button
                 type="submit"
-                onClick={handleLogin}
                 className="cursor-pointer w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 hover:from-black hover:to-gray-800 text-white font-semibold py-2 rounded-xl transform hover:scale-105 transition-transform duration-300 shadow-lg"
               >
                 Login

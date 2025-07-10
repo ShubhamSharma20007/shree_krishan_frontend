@@ -336,9 +336,6 @@ useEffect(() => {
 
 
 
-
-
-
 const UpdateInventoryDialog = ({
   open,
   setOpen,
@@ -464,7 +461,6 @@ console.log(partOptions,12)
     </Dialog>
   );
 };
-
 
 
 
@@ -797,12 +793,12 @@ const QuantityComponent =(params:CustomCellRendererProps)=>{
   if(params.data.stockType.toLowerCase() === 'out'){
     return <div className='flex items-center gap-3 text-red-500'>
       <span className='text'>{params.data.qty}</span>
-      <TrendingDown/>
+      <TrendingUp/>
     </div>
   }else{
    return <div className='flex items-center gap-3 text-green-500'>
       <span>{params.data.qty}</span>
-      <TrendingUp/>
+      <TrendingDown/>
     </div>
   }
 }
