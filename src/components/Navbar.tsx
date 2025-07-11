@@ -8,7 +8,9 @@ import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import logo1 from '@/assets/logo1.png'
 import logo2 from '@/assets/logo2.png'
-
+import ProductServiceInstance from "../../service/product.service"
+import { useFetch } from "@/hooks/useFetch";
+import { VITE_BASE_URL } from "@/helper/instance";
 interface MenuItem {
   title: string;
   url: string;
@@ -79,7 +81,8 @@ const Navbar = ({
   const [inputValue,setInputValue]= useState('')
   const [debouncedText,{isPending}] = useDebounce(inputValue, 800);
   const navigate = useNavigate()
-const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { fn: getProductsFn, data: getProductsRes, loading: productsLoading } = useFetch(ProductServiceInstance.getProducts);
+const handleInputValue = async(e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
@@ -91,16 +94,27 @@ const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
       return;
     }
 
-    const filtered = data.filter((mobile) =>
-      mobile.name.toLowerCase().includes(trimmed.toLowerCase())
-    );
-    setMobiles(filtered);
+     try {
+      getProductsFn({itemName:inputValue })
+    } catch (error) {
+      console.log('Error during the error',error)
+    }
+    // const filtered = data.filter((mobile) =>
+    //   mobile.name.toLowerCase().includes(trimmed.toLowerCase())
+    // );
+    setMobiles([]);
   }, [debouncedText]);
 
-  function redirectTo(device:string){
+  useEffect(()=>{
+    if(getProductsRes){
+      setMobiles(getProductsRes)
+    }
+  },[getProductsRes])
+
+  function redirectTo(_id:string){
     setInputValue('')
     setMobiles([])
-    return navigate("/accessories/"+encodeURIComponent(device))
+    return navigate("/accessories/"+_id)
   }
 
 
@@ -125,13 +139,13 @@ const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
           {mobiles.length > 0 ? (
             mobiles.map((mobile:any, i:number) => (
               <Card onClick={()=>{
-                redirectTo(mobile.name)
+                redirectTo(mobile._id)
               }} key={i} className="h-20 px-4 hover:bg-accent cursor-pointer">
                 <div className="flex gap-2 items-center h-full w-full">
                   <div className="w-16 h-16">
-                    <img className="w-full h-full object-contain" src={mobile.img} alt={mobile.name} />
+                    <img className="w-full h-full object-contain" src={`${VITE_BASE_URL}/uploads/${mobile.images?.[0] || ''}`} alt={mobile.itemName} />
                   </div>
-                  <p className="text-sm">{mobile.name}asd</p>
+                  <p className="text-sm">{mobile.itemName}</p>
                 </div>
               </Card>
             ))

@@ -15,6 +15,7 @@ import { useFetch } from '@/hooks/useFetch';
 import ProductServiceInstance from '../../service/product.service';
 import { VITE_BASE_URL } from '@/helper/instance';
 import { useEffect, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 function useQuery() {
   const { search } = useLocation();
@@ -24,9 +25,13 @@ function useQuery() {
 const Products = () => {
   const query = useQuery();
   const brand = query.get('brand') || '';
-  
+  const [inputValue, setInputValue] = useState('');
+  const [debouncedText] = useDebounce(inputValue, 800);
   const { fn: getProductsFn, data: getProductsRes, loading: productsLoading } = useFetch(ProductServiceInstance.getProducts);
+
   const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]); // original data
+  const [filteredProducts, setFilteredProducts] = useState([]); // search filtered data
 
   useEffect(() => {
     if (brand) {
@@ -43,9 +48,30 @@ const Products = () => {
         name: item.itemName || '',
       }));
       setProducts(formattedProducts);
+      setAllProducts(formattedProducts);
     }
   }, [getProductsRes]);
 
+  useEffect(() => {
+    const trimmed = debouncedText.trim().toLowerCase();
+    if (!trimmed) {
+      setFilteredProducts([]);
+      return;
+    }
+
+    const result = allProducts.filter(item =>
+      item.name.toLowerCase().includes(trimmed)
+    );
+    setFilteredProducts(result);
+  }, [debouncedText, allProducts]);
+
+  const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
+
+  const displayProducts = filteredProducts.length > 0 || inputValue.trim()
+    ? filteredProducts
+    : products;
 
   return (
     <div className='container mx-auto p-3 md:p-0'>
@@ -70,28 +96,44 @@ const Products = () => {
       </Breadcrumb>
 
       <div className='mt-10'>
-        <h1 className='text-2xl font-semibold text-foreground capitalize text-center'>Select {products[0]?.brand} Mobile Phone Model</h1>
-        
-        <div className='mx-auto w-1/2 relative'>
-          <Input className="w-full placeholder:capitalize pr-8 border-accent-foreground/40 mt-5" placeholder={`Search your: ${products[0]?.brand} handset`} />
+        <h1 className='text-2xl font-semibold text-foreground capitalize text-center'>
+          Select {products[0]?.brand} Mobile Phone Model
+        </h1>
+
+        <div className='mx-auto w-full md:w-1/2 relative'>
+          <Input
+            value={inputValue}
+            onChange={handleInputValue}
+            className="w-full placeholder:capitalize pr-8 border-accent-foreground/40 mt-5"
+            placeholder={`Search your: ${products[0]?.brand} handset`}
+          />
           <Search className='w-4 h-4 text-gray-500 absolute top-1/2 right-2 transform -translate-y-1/2' />
         </div>
 
-        {/* Dynamic Products */}
-        <div className='mt-10 grid grid-cols-2 container mx-auto sm:grid-cols-4 md:grid-cols-5 gap-4 '>
-          {products.length > 0 ? (
-            products.map((item, i) => (
+        <div className='mt-10 grid grid-cols-2 container mx-auto sm:grid-cols-4 md:grid-cols-5 gap-4'>
+          {displayProducts.length > 0 ? (
+            displayProducts.map((item, i) => (
               <div key={i}>
                 <a href={`/accessories/${item.id}`} className='flex justify-center'>
                   <Card className='h-40 w-40 bg-transparent border-0'>
-                    <img src={item.img} alt={item.name} className='w-full h-full rounded-xl object-contain' />
+                    <img
+                      src={item.img}
+                      alt={item.name}
+                      className='w-full h-full rounded-xl object-contain'
+                    />
                   </Card>
                 </a>
-                <h1 className='text-center font-medium text-sm text-foreground capitalize mt-4'>{item.name}</h1>
+                <h1 className='text-center font-medium text-sm text-foreground capitalize mt-4'>
+                  {item.name}
+                </h1>
               </div>
             ))
           ) : (
-            !productsLoading && <p className="text-center col-span-full text-muted-foreground mt-10">No Models Found</p>
+            !productsLoading && (
+              <p className="text-center col-span-full text-muted-foreground mt-10">
+                No Models Found
+              </p>
+            )
           )}
         </div>
       </div>

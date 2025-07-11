@@ -17,7 +17,7 @@ class ProductService {
     }).then(res => res.data?.product);
   }
 
-  getProducts(params: { brand?: string } = {}): Promise<any> {
+  getProducts(params: { brand?: string ,itemName?:string} = {}): Promise<any> {
     return instance.get('/products', { params }).then(res => res.data);
   }
 

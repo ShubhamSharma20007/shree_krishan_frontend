@@ -30,7 +30,6 @@ const AccessoriesOverview = () => {
       getProductAndItsPartDetail(partId);
     }
   }, [partId]);
-
   useEffect(() => {
     if (getProductAndItsPartDetailRes) {
       const { productDetails, productPart } = getProductAndItsPartDetailRes;
@@ -94,8 +93,11 @@ const AccessoriesOverview = () => {
         )}
 
         <div className="flex-1">
-          <h2 className="text-3xl font-bold text-foreground mb-2 capitalize">
+          <h2 className="text-3xl font-bold text-foreground mb-2 capitalize flex items-center gap-5">
             {productPart?.partName}
+            {
+              Boolean(0)  && <img className='h-12' src="https://t4.ftcdn.net/jpg/02/65/83/15/360_F_265831541_RUAcAGkikMs2WJOZ40D1BzjWqyp0MRze.jpg" alt="" />
+            }
           </h2>
           <h3 className="text-lg text-foreground/70 mb-6 capitalize">
             {product?.itemName}

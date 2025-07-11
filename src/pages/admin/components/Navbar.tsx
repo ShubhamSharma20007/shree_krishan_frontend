@@ -40,10 +40,66 @@ export default function Component() {
       {/* Mobile Sidebar */}
       <Sheet>
         <SheetTrigger asChild className="print:hidden">
+          <div className="flex justify-between items-center w-full md:w-auto space-x-2.5  ">
           <Button variant="outline" size="icon" className="lg:hidden">
             <MenuIcon className="h-6 w-6" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
+    <div className="flex justify-between items-center gap-3 md:hidden">
+
+        {/* Notifications */}
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Button variant="secondary" size="icon">
+              <div className="relative">
+                {notifications.length > 0 && (
+                  <div className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500" />
+                )}
+                <BellIcon />
+              </div>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-64 max-h-80 overflow-y-auto">
+            <DropdownMenuLabel>Stock Alert Notifications 🔔</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+
+            {notifications.length > 0 ? (
+          notifications.map((alert, index) => (
+            <DropdownMenuItem key={index} className="flex flex-col items-start">
+              <span className="text-sm font-medium capitalize">
+                {alert.productName} - {alert.productPartName}
+              </span>
+              <span className="text-xs text-muted-foreground">
+                Stock Left: {alert.stockQty}
+              </span>
+            </DropdownMenuItem>
+          ))
+        ) : (
+              <DropdownMenuItem>No new notifications</DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+
+
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+           
+        <Avatar>
+          <AvatarImage src="https://github.com/shubhamsharma20007.png" />
+          <AvatarFallback>SS</AvatarFallback>
+        </Avatar>
+          </DropdownMenuTrigger>
+         <DropdownMenuContent>
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem >Logout</DropdownMenuItem>
+  </DropdownMenuContent>
+        </DropdownMenu>
+
+    </div>
+
+</div>
         </SheetTrigger>
         <SheetContent side="left" className="p-4">
           <NavLink to="#" className="mr-6 hidden lg:flex">
@@ -147,10 +203,21 @@ export default function Component() {
         </DropdownMenu>
 
 
+
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+           
         <Avatar>
           <AvatarImage src="https://github.com/shubhamsharma20007.png" />
           <AvatarFallback>SS</AvatarFallback>
         </Avatar>
+          </DropdownMenuTrigger>
+         <DropdownMenuContent>
+    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+    <DropdownMenuSeparator />
+    <DropdownMenuItem >Logout</DropdownMenuItem>
+  </DropdownMenuContent>
+        </DropdownMenu>
       </nav>
     </header>
   );

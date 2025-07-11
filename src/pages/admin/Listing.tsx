@@ -212,11 +212,13 @@ const Listing = () => {
 const [isUpdateOpen, setIsUpdateOpen] = useState(false);
 const [showHandleDelete,setShowHandleDelete] = useState(false)
 const [deleteId,setDeleteId] = useState('')
+
+
   useEffect(() => {
     if (productRes) {
-
       setProducts((prev) => [
         {
+          ...productRes,
           Name: productRes.itemName,
           Model:productRes?.model,
           Brand: productRes.brand?.brandName || '',
@@ -230,7 +232,7 @@ const [deleteId,setDeleteId] = useState('')
     }
   }, [productRes, setProducts]);
 
-  
+  console.log(productRes,1212,products)
 
   const AddProductDialog = () => {
     const { fn: getBrands, data: brandRes } = useFetch(BrandServiceInstance.getAllBrand);
