@@ -7,7 +7,9 @@ import { useEffect, useRef } from "react";
 import { useFetch } from "@/hooks/useFetch";
 import LoginServiceInstance from '../../service/login.service';
 import toast from "react-hot-toast";
-
+import BG from "@/assets/banner1.webp"
+import Cookies from 'js-cookie';
+import { LoaderIcon } from "lucide-react";
 export default function Login() {
   const navigate = useNavigate();
   const { fn: userLoginFn, data: loginRes, loading } = useFetch(LoginServiceInstance.userLogin);
@@ -27,16 +29,19 @@ export default function Login() {
   useEffect(() => {
     if (loginRes) {
       console.log(loginRes)
+      Cookies.set('token', loginRes.token, { sameSite: 'None', secure: true }); 
       toast.success("Login successfully");
+      if(loginRes?.token){
+        navigate("/admin/dashboard");
+      }
       formRef.current?.reset();
-      navigate("/admin/dashboard");
     }
   }, [loginRes]);
 
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 bg-cover bg-center relative px-4 py-12"
-      style={{ backgroundImage: "url('/src/assets/banner1.webp')" }}
+      style={{ backgroundImage: `url(${BG})` }}
     >
       <div className="absolute inset-0 bg-opacity-60"></div>
 
@@ -91,10 +96,13 @@ export default function Login() {
                 </div>
 
                 <Button
+                disabled={loading}
                 type="submit"
                 className="cursor-pointer w-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-700 hover:from-black hover:to-gray-800 text-white font-semibold py-2 rounded-xl transform hover:scale-105 transition-transform duration-300 shadow-lg"
               >
-                Login
+               {
+                loading ?  <LoaderIcon className="animate-spin"/> : "Login"
+               }
               </Button>
               </form>
             </CardContent>

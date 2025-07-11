@@ -27,15 +27,15 @@ export default function Component() {
     getNotificationFn();
   }, []);
 
+
   useEffect(() => {
-    if (getNotificationRes && Array.isArray(getNotificationRes.alerts)) {
+    if (getNotificationRes && Array.isArray(getNotificationRes?.alerts)) {
       setNotifications(getNotificationRes.alerts);
     }
   }, [getNotificationRes]);
 
-  console.log(notifications)
 
-
+  console.log(getNotificationRes?.alerts,12)
 
 
   return (
@@ -68,16 +68,18 @@ export default function Component() {
             <DropdownMenuSeparator />
 
             {notifications.length > 0 ? (
-          notifications?.map((alert, index) => (
+          notifications.map((alert, index) =>{
+            return(
             <DropdownMenuItem key={index} className="flex flex-col items-start">
               <span className="text-sm font-medium capitalize">
                 {alert.productName} - {alert.productPartName}
               </span>
-              <span className="text-xs text-muted-foreground">
-                Stock Left: {alert.stockQuantity}
+              <span className="text-lg text-muted-foreground">
+                Stock Left: {alert.stockQuantity }
               </span>
             </DropdownMenuItem>
-          ))
+          )
+          })
         ) : (
               <DropdownMenuItem>No new notifications</DropdownMenuItem>
             )}

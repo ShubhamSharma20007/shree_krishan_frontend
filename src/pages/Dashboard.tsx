@@ -10,7 +10,13 @@ import { useNavigate } from 'react-router-dom'
 import { useFetch } from '@/hooks/useFetch';
 import BrandServiceInstance from '../../service/brand.service';
 import { VITE_BASE_URL } from '@/helper/instance'
-
+import Brand from "@/assets/brand.png"
+import Mobile from "@/assets/mobile.png"
+import Part from "@/assets/parts.png"
+import Battery from '@/assets/battery.jpg'
+import Screen from "@/assets/screen.jpg"
+import Accessories from "@/assets/accessories.jpg"
+import PartImg from  "@/assets/parts.png"
   // const parts = [
   //   {
   //     title: 'Spare Parts',
@@ -123,19 +129,19 @@ const Dashboard = () => {
           {[
             {
               title: "Battery",
-              img: "/src/assets/battery.jpg"
+              img: Battery
             },
             {
               title: "Screen",
-              img: "/src/assets/screen.jpg"
+              img: Screen
             },
             {
               title: "Accessories",
-              img: "/src/assets/accessories.jpg"
+              img: Accessories
             },
             {
               title: "Internal Parts",
-              img: "/src/assets/parts.png"
+              img:PartImg
             }
           ].map((part, index) => (
             <Card key={index} className="p-4 text-center shadow-md rounded-xl bg-white dark:bg-zinc-900">
@@ -165,7 +171,7 @@ const Dashboard = () => {
     {/* Step 1 */}
     <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700 text-center">
       <img
-        src='/src/assets/brand.png'
+        src={Brand}
         alt="Select Brand"
         className="h-16 w-16 mx-auto mb-4 "
       />
@@ -178,7 +184,7 @@ const Dashboard = () => {
     {/* Step 2 */}
     <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700 text-center">
       <img
-        src='/src/assets/mobile.png'
+        src={Mobile}
         alt="Select Model"
         className="h-16 w-16 mx-auto mb-4"
       />
@@ -191,7 +197,7 @@ const Dashboard = () => {
     {/* Step 3 */}
     <div className="bg-white dark:bg-zinc-900 p-6 rounded-xl shadow-md border border-gray-200 dark:border-zinc-700 text-center">
       <img
-        src='/src/assets/parts.png'
+        src={Part}
         alt="Select Product Type"
         className="h-16 w-16 mx-auto mb-4"
       />
