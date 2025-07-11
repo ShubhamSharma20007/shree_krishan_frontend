@@ -17,10 +17,12 @@ import {
 import { useFetch } from '@/hooks/useFetch';
 import NotificationServiceInstance from '../../../../service/notification.service';
 import { useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom"
+import Cookies from 'js-cookie';
 export default function Component() {
   const { fn: getNotificationFn, data: getNotificationRes, loading: notificationLoading } = useFetch(NotificationServiceInstance.getNotification);
   const [notifications, setNotifications] = useState([]);
-
+  const navigate  = useNavigate()
   useEffect(() => {
     getNotificationFn();
   }, []);
@@ -93,7 +95,13 @@ export default function Component() {
          <DropdownMenuContent>
     <DropdownMenuLabel>My Account</DropdownMenuLabel>
     <DropdownMenuSeparator />
-    <DropdownMenuItem >Logout</DropdownMenuItem>
+    <DropdownMenuItem  onClick={()=>{
+    navigate('/')
+    }}>Back To Home</DropdownMenuItem>
+    <DropdownMenuItem  onClick={()=>{
+    Cookies.remove('token')
+    navigate('/login')
+    }} >Logout</DropdownMenuItem>
   </DropdownMenuContent>
         </DropdownMenu>
 
@@ -215,7 +223,13 @@ export default function Component() {
          <DropdownMenuContent>
     <DropdownMenuLabel>My Account</DropdownMenuLabel>
     <DropdownMenuSeparator />
-    <DropdownMenuItem >Logout</DropdownMenuItem>
+      <DropdownMenuItem  onClick={()=>{
+    navigate('/')
+    }}>Back To Home</DropdownMenuItem>
+    <DropdownMenuItem  onClick={()=>{
+    Cookies.remove('token')
+    navigate('/login')
+    }}>Logout</DropdownMenuItem>
   </DropdownMenuContent>
         </DropdownMenu>
       </nav>

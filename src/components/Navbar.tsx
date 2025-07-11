@@ -11,6 +11,7 @@ import logo2 from '@/assets/logo2.png'
 import ProductServiceInstance from "../../service/product.service"
 import { useFetch } from "@/hooks/useFetch";
 import { VITE_BASE_URL } from "@/helper/instance";
+import Cookies from 'js-cookie';
 interface MenuItem {
   title: string;
   url: string;
@@ -78,6 +79,7 @@ const Navbar = ({
 
   const { setTheme, theme } = useTheme();
   const [mobiles,setMobiles]= useState<any>([])
+    const token = Cookies.get('token');
   const [inputValue,setInputValue]= useState('')
   const [debouncedText,{isPending}] = useDebounce(inputValue, 800);
   const navigate = useNavigate()
@@ -121,65 +123,154 @@ const handleInputValue = async(e: React.ChangeEvent<HTMLInputElement>) => {
   return (
     <section className="mb-5">
       <div className="shadow-sm px-4">
-        <nav className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 items-center gap-4">
-          {/* Logo */}
-          <div className="flex justify-between lg:col-span-1">
-            <Link to={'/'} className="flex items-center gap-2">
-              <img src={theme === 'light' ? logo2 : logo1} className="text-lg h-20 w-25  font-semibold tracking-tighter"/>
-            </Link>
-          </div>
+    <nav className="grid grid-cols-1 lg:grid-cols-3 items-center gap-2 px-4 py-2">
+  {/* Logo */}
+  <div className="flex justify-between items-center w-full lg:col-span-1">
+    <Link to="/" className="flex items-center gap-2">
+      <img
+        src={theme === "light" ? logo2 : logo1}
+        className="text-lg h-20 w-25 font-semibold tracking-tighter"
+        alt="logo"
+      />
+    </Link>
 
-          {/* Search Bar */}
-          <div className="sm:col-span-1 lg:col-span-2 relative">
-            <Input type="search" value={inputValue} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
-              handleInputValue(e)
-            }} className="w-full border-accent-foreground/40" placeholder="Search..." />
-            {inputValue.trim().length > 0 && (
-        <Card className="w-full mt-2 mobile-container absolute gap-2 overflow-y-auto rounded-lg max-h-64 border z-50 p-0 bg-background">
-          {mobiles.length > 0 ? (
-            mobiles.map((mobile:any, i:number) => (
-              <Card onClick={()=>{
-                redirectTo(mobile._id)
-              }} key={i} className="h-20 px-4 hover:bg-accent cursor-pointer">
-                <div className="flex gap-2 items-center h-full w-full">
-                  <div className="w-16 h-16">
-                    <img className="w-full h-full object-contain" src={`${VITE_BASE_URL}/uploads/${mobile.images?.[0] || ''}`} alt={mobile.itemName} />
-                  </div>
-                  <p className="text-sm">{mobile.itemName}</p>
-                </div>
-              </Card>
-            ))
-          ) : (
-          !isPending() && <p className="p-4 text-sm text-muted-foreground text-center border-0">No results found</p>
-          )}
-        </Card>
-      )}
-          </div>
+    {/* Right Side Buttons (mobile stacked beside logo) */}
+    <div className="flex gap-2 items-center lg:hidden">
+      <Button
+        variant="outline"
+        size="icon"
+        className="border-accent-foreground/40"
+        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      >
+        {theme === "light" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+      </Button>
 
-          {/* Right Side Buttons */}
-          <div className="flex gap-2 items-center justify-end  sm:col-span-1 lg:col-span-2">
-            <Button
-              variant="outline"
-              size="icon"
-              className="border-accent-foreground/40"
-              onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      <Button asChild variant="outline" size="sm" className="border-accent-foreground/40">
+        {token ? (
+          <Link to="/admin/dashboard" className="flex items-center gap-1">
+            <CircleUserRound className="w-5 h-5" />
+            <span className="hidden md:inline">Dashboard</span>
+          </Link>
+        ) : (
+          <Link to={auth.account.url} className="flex items-center gap-1">
+            <CircleUserRound className="w-5 h-5" />
+            <span className="hidden md:inline">{auth.account.title}</span>
+          </Link>
+        )}
+      </Button>
+    </div>
+  </div>
+
+  {/* Search bar for desktop */}
+  <div className="hidden lg:block lg:col-span-1 relative w-full">
+    <Input
+      type="search"
+      value={inputValue}
+      onChange={handleInputValue}
+      className="w-full border-accent-foreground/40"
+      placeholder="Search..."
+    />
+    {inputValue.trim().length > 0 && (
+      <Card className="w-full mt-2 absolute gap-2 overflow-y-auto rounded-lg max-h-64 border z-50 p-0 bg-background">
+        {mobiles.length > 0 ? (
+          mobiles.map((mobile: any, i: number) => (
+            <Card
+              onClick={() => redirectTo(mobile._id)}
+              key={i}
+              className="h-20 px-4 hover:bg-accent cursor-pointer"
             >
-              {theme === "light" ? (
-                <Sun className="h-5 w-5 " />
-              ) : (
-                <Moon className="h-5 w-5" />
-              )}
-            </Button>
+              <div className="flex gap-2 items-center h-full w-full">
+                <div className="w-16 h-16">
+                  <img
+                    className="w-full h-full object-contain"
+                    src={`${VITE_BASE_URL}/uploads/${mobile.images?.[0] || ''}`}
+                    alt={mobile.itemName}
+                  />
+                </div>
+                <p className="text-sm">{mobile.itemName}</p>
+              </div>
+            </Card>
+          ))
+        ) : (
+          !isPending() && (
+            <p className="p-4 text-sm text-muted-foreground text-center border-0">
+              No results found
+            </p>
+          )
+        )}
+      </Card>
+    )}
+  </div>
 
-            <Button asChild variant="outline" size="sm" className="border-accent-foreground/40">
-              <Link to={auth.account.url} className="flex items-center gap-1">
-                <CircleUserRound className="w-5 h-5" />
-                <span className="hidden md:inline">{auth.account.title}</span>
-              </Link>
-            </Button>
+  {/* Right side buttons for desktop */}
+  <div className="hidden lg:flex gap-2 items-center justify-end lg:col-span-1">
+    <Button
+      variant="outline"
+      size="icon"
+      className="border-accent-foreground/40"
+      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+    >
+      {theme === "light" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+    </Button>
 
-          </div>
-        </nav>
+    <Button asChild variant="outline" size="sm" className="border-accent-foreground/40">
+      {token ? (
+        <Link to="/admin/dashboard" className="flex items-center gap-1">
+          <CircleUserRound className="w-5 h-5" />
+          <span className="hidden md:inline">Dashboard</span>
+        </Link>
+      ) : (
+        <Link to={auth.account.url} className="flex items-center gap-1">
+          <CircleUserRound className="w-5 h-5" />
+          <span className="hidden md:inline">{auth.account.title}</span>
+        </Link>
+      )}
+    </Button>
+  </div>
+
+  {/* Search bar for mobile (below logo + buttons) */}
+  <div className="lg:hidden w-full mt-2 relative">
+    <Input
+      type="search"
+      value={inputValue}
+      onChange={handleInputValue}
+      className="w-full border-accent-foreground/40"
+      placeholder="Search..."
+    />
+    {inputValue.trim().length > 0 && (
+      <Card className="w-full mt-2 absolute gap-2 overflow-y-auto rounded-lg max-h-64 border z-50 p-0 bg-background">
+        {mobiles.length > 0 ? (
+          mobiles.map((mobile: any, i: number) => (
+            <Card
+              onClick={() => redirectTo(mobile._id)}
+              key={i}
+              className="h-20 px-4 hover:bg-accent cursor-pointer"
+            >
+              <div className="flex gap-2 items-center h-full w-full">
+                <div className="w-16 h-16">
+                  <img
+                    className="w-full h-full object-contain"
+                    src={`${VITE_BASE_URL}/uploads/${mobile.images?.[0] || ''}`}
+                    alt={mobile.itemName}
+                  />
+                </div>
+                <p className="text-sm">{mobile.itemName}</p>
+              </div>
+            </Card>
+          ))
+        ) : (
+          !isPending() && (
+            <p className="p-4 text-sm text-muted-foreground text-center border-0">
+              No results found
+            </p>
+          )
+        )}
+      </Card>
+    )}
+  </div>
+</nav>
+
+
       </div>
     </section>
   );
