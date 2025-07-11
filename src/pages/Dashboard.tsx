@@ -3,9 +3,11 @@ import ImageContainer from '@/components/ImageContainer'
 import { Button } from '@/components/ui/button'
 import {Card} from "@/components/ui/card"
 import { useNavigate } from 'react-router-dom'
+import Img1 from '@/assets/banner-img.webp'
+import Img2 from '@/assets/banner-img2.webp'
   const images = [
-    { image: 'src/assets/banner-img.webp' ,srcSet:"@/assets/banner-img.webp" },
-    { image: 'src/assets/banner-img2.webp',srcSet:"@/assets/banner-img2.webp" },
+    { image: Img1 },
+    { image:Img2 }
   ]
 import { useFetch } from '@/hooks/useFetch';
 import BrandServiceInstance from '../../service/brand.service';
@@ -103,7 +105,7 @@ const Dashboard = () => {
     <div className='p-3 md:p-0'>
       {/* image Container */}
       {
-        images.map((img, i) => <div key={i} className='mt-5 container mx-auto px-2'><ImageContainer images={img.image} srcSet={img.srcSet} /></div>)
+        images.map((img, i) => <div key={i} className='mt-5 container mx-auto px-2'><ImageContainer images={img.image} /></div>)
       }
       {/* branding partner's */}
       <div className='mt-20 mx-auto container' id='all_brand'>

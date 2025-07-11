@@ -135,17 +135,17 @@ const handleInputValue = async(e: React.ChangeEvent<HTMLInputElement>) => {
     </Link>
 
     {/* Right Side Buttons (mobile stacked beside logo) */}
-    <div className="flex gap-2 items-center lg:hidden">
+    <div className="flex gap-2 items-center lg:hidden ">
       <Button
         variant="outline"
         size="icon"
-        className="border-accent-foreground/40"
+        className=" border-accent-foreground/40"
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       >
         {theme === "light" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
       </Button>
 
-      <Button asChild variant="outline" size="sm" className="border-accent-foreground/40">
+      <Button asChild variant="outline" size="sm" className="border-accent-foreground/40 ">
         {token ? (
           <Link to="/admin/dashboard" className="flex items-center gap-1">
             <CircleUserRound className="w-5 h-5" />
@@ -207,7 +207,7 @@ const handleInputValue = async(e: React.ChangeEvent<HTMLInputElement>) => {
     <Button
       variant="outline"
       size="icon"
-      className="border-accent-foreground/40"
+      className="border-accent-foreground/40 hidden"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
       {theme === "light" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}

@@ -19,6 +19,7 @@ export const useFetch = (cb:any)=>{
         } catch (error:any) {
             console.log(error?.response ||  error)
             error = error?.response?.data?.message || error?.response?.data?.error?.message || error.message as string || error;
+            console.log(error,222)
             {
             showToast  && toast.error(error)
             }

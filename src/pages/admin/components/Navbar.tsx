@@ -22,6 +22,8 @@ import Cookies from 'js-cookie';
 export default function Component() {
   const { fn: getNotificationFn, data: getNotificationRes, loading: notificationLoading } = useFetch(NotificationServiceInstance.getNotification);
   const [notifications, setNotifications] = useState([]);
+  const [isSideBarOpen,setIsSideBarOpen] = useState(false)
+
   const navigate  = useNavigate()
   useEffect(() => {
     getNotificationFn();
@@ -42,10 +44,10 @@ export default function Component() {
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6 sticky z-[10] bg-white shadow top-0">
 
       {/* Mobile Sidebar */}
-      <Sheet>
+      <Sheet open={isSideBarOpen} onOpenChange={setIsSideBarOpen}>
         <SheetTrigger asChild className="print:hidden">
           <div className="flex justify-between items-center w-full md:w-auto space-x-2.5  ">
-          <Button variant="outline" size="icon" className="lg:hidden">
+          <Button variant="outline" size="icon" className="lg:hidden" onClick={()=>setIsSideBarOpen(true)}>
             <MenuIcon className="h-6 w-6" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
@@ -119,12 +121,12 @@ export default function Component() {
             <span className="sr-only">Acme Inc</span>
           </NavLink>
           <div className="grid gap-2 py-6">
-            <NavLink to="/" className="flex w-full items-center py-2 text-lg font-semibold">Home</NavLink>
-            <NavLink to="/admin/brandlist" className="flex w-full items-center py-2 text-lg font-semibold">Brand List</NavLink>
-            <NavLink to="/admin/listing" className="flex w-full items-center py-2 text-lg font-semibold">Product List</NavLink>
-            <NavLink to="/admin/product-part-list" className="flex w-full items-center py-2 text-lg font-semibold">Product Part List</NavLink>
-            <NavLink to="/admin/inventory" className="flex w-full items-center py-2 text-lg font-semibold">Update Inventory</NavLink>
-            <NavLink to="/admin/report" className="flex w-full items-center py-2 text-lg font-semibold">Stock Report</NavLink>
+            <NavLink to="/" className="flex w-full items-center py-2 text-lg font-semibold" onClick={()=>setIsSideBarOpen(false)}>Home</NavLink>
+            <NavLink to="/admin/brandlist" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Brand List</NavLink>
+            <NavLink to="/admin/listing" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Product List</NavLink>
+            <NavLink to="/admin/product-part-list" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Product Part List</NavLink>
+            <NavLink to="/admin/inventory" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Update Inventory</NavLink>
+            <NavLink to="/admin/report" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Stock Report</NavLink>
 
 
           </div>
