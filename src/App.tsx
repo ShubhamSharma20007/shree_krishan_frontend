@@ -18,6 +18,8 @@ const BrandList = lazy(() => import('./pages/admin/BrandList'))
 const ProductPartList = lazy(() => import('./pages/admin/ProductPartList'))
 const Inventory = lazy(() => import('./pages/admin/Inventory'))
 const Report = lazy(() => import('./pages/admin/Report'))
+import ProtectedRoute from './components/protectedRoute';
+import NotFound from './pages/NotFound'
 
 
 const Loader =()=><div className='min-h-screen flex items-center justify-center w-full'>
@@ -57,7 +59,7 @@ export const App = () => {
           <Route path='/sellproduct' element={<SellProductDashboard />} />
           <Route path='/sellproduct/:device' element={<QuesAns />} />
 
-          <Route path='admin' element={<Layout />}>
+          <Route path='admin' element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route index path='dashboard' element={<AdminDashboard />} />
             <Route path='listing' element={<Listing />} />
             <Route path='brandlist' element={<BrandList />} />
@@ -67,7 +69,7 @@ export const App = () => {
           </Route>
 
           <Route path='/login' element={<Login />} />
-          <Route path='*' element={<Dashboard />} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </Suspense>
 
