@@ -133,7 +133,7 @@ const handleInputValue = async(e: React.ChangeEvent<HTMLInputElement>) => {
           <div className="sm:col-span-1 lg:col-span-2 relative">
             <Input type="search" value={inputValue} onChange={(e:React.ChangeEvent<HTMLInputElement>)=>{
               handleInputValue(e)
-            }} className="w-full border-accent-foreground/40" placeholder="Search..." />
+            }} className="w-full border-accent-foreground/40" placeholder="Search your mobile phone for parts" />
             {inputValue.trim().length > 0 && (
         <Card className="w-full mt-2 mobile-container absolute gap-2 overflow-y-auto rounded-lg max-h-64 border z-50 p-0 bg-background">
           {mobiles.length > 0 ? (

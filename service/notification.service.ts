@@ -2,7 +2,7 @@ import { instance } from "../src/helper/instance";
 
 class NotificationService {
     getNotification():Promise<any>{
-        return instance.post('/stock-report').then(res=>res.data?.stockReport)
+        return instance.get('/stockAlerts').then(res=>res.data)
     }
 
 }

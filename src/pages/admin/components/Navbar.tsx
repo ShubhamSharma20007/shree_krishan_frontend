@@ -26,10 +26,12 @@ export default function Component() {
   }, []);
 
   useEffect(() => {
-    if (getNotificationRes && Array.isArray(getNotificationRes)) {
-      setNotifications(getNotificationRes);
+    if (getNotificationRes && Array.isArray(getNotificationRes.alerts)) {
+      setNotifications(getNotificationRes.alerts);
     }
   }, [getNotificationRes]);
+
+  console.log(notifications)
 
 
 
@@ -64,13 +66,13 @@ export default function Component() {
             <DropdownMenuSeparator />
 
             {notifications.length > 0 ? (
-          notifications.map((alert, index) => (
+          notifications?.map((alert, index) => (
             <DropdownMenuItem key={index} className="flex flex-col items-start">
               <span className="text-sm font-medium capitalize">
                 {alert.productName} - {alert.productPartName}
               </span>
               <span className="text-xs text-muted-foreground">
-                Stock Left: {alert.stockQty}
+                Stock Left: {alert.stockQuantity}
               </span>
             </DropdownMenuItem>
           ))
@@ -86,7 +88,7 @@ export default function Component() {
           <DropdownMenuTrigger>
            
         <Avatar>
-          <AvatarImage src="https://github.com/shubhamsharma20007.png" />
+          <AvatarImage src="" />
           <AvatarFallback>SS</AvatarFallback>
         </Avatar>
           </DropdownMenuTrigger>
@@ -192,7 +194,7 @@ export default function Component() {
                 {alert.productName} - {alert.productPartName}
               </span>
               <span className="text-xs text-muted-foreground">
-                Stock Left: {alert.stockQty}
+                Stock Left: {alert.stockQuantity}
               </span>
             </DropdownMenuItem>
           ))
@@ -208,7 +210,7 @@ export default function Component() {
           <DropdownMenuTrigger>
            
         <Avatar>
-          <AvatarImage src="https://github.com/shubhamsharma20007.png" />
+          <AvatarImage src="" />
           <AvatarFallback>SS</AvatarFallback>
         </Avatar>
           </DropdownMenuTrigger>

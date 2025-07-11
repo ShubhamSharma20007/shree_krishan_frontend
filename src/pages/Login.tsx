@@ -36,14 +36,14 @@ export default function Login() {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600 bg-cover bg-center relative px-4 py-12"
-      style={{ backgroundImage: "url('/src/assets/banner1.jpg')" }}
+      style={{ backgroundImage: "url('/src/assets/banner1.webp')" }}
     >
       <div className="absolute inset-0 bg-opacity-60"></div>
 
       <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-lg">
 
         {/* Left Section */}
-        <div className="hidden md:flex flex-col justify-center items-center p-10 text-white">
+        <div className="md:flex flex-col justify-center items-center p-10 text-white">
           <h1 className="text-4xl font-extrabold mb-4 text-center leading-tight drop-shadow-lg">Welcome to <br />Admin Dashboard</h1>
           <p className="text-lg mb-6 text-center text-white/90">Easily manage stock, monitor inventory, and access reports with a modern interface.</p>
           <Button onClick={()=>navigate("/")} className="cursor-pointer bg-gradient-to-r from-black to-gray-800 hover:from-gray-900 hover:to-black text-white font-semibold py-2 rounded-xl transform hover:scale-105 transition-transform duration-300 shadow-lg">
