@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button'
 import {Card} from "@/components/ui/card"
 import { useNavigate } from 'react-router-dom'
   const images = [
-    { image: 'src/assets/banner-img.webp' },
-    { image: 'src/assets/banner-img2.webp' }
+    { image: '@/assets/banner-img.webp' },
+    { image: '@/assets/banner-img2.webp' }
   ]
 import { useFetch } from '@/hooks/useFetch';
 import BrandServiceInstance from '../../service/brand.service';
