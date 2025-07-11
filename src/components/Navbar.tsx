@@ -36,34 +36,6 @@ interface Navbar1Props {
   };
 }
 
- const data =[
-    {
-      img:"https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/150/feature_variant/3211/Samsung_Galaxy_S10_Plus_spare_parts_accessories_by_maxbhi.jpeg?t=1731769325",
-      name:"Samsung Galaxy S10 Plus"
-    },
-    {
-      img:'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/200/200/feature_variant/4922/Motorola_Moto_G60_spare_parts_accessories_by_maxbhi.jpeg?t=1741857284',
-      name:'Motorola Moto G60'
-    },
-    {
-      img:'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/100/150/feature_variant/4585/Apple_iPhone_12_Pro_Max_spare_parts_accessories_by_maxbhi.jpeg?t=1731770251',
-      name:'Apple iPhone 12 Pro Max'
-    },
-    {
-      img:'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/200/200/feature_variant/4274/OnePlus_Nord_spare_parts_accessories_by_maxbhi.jpeg?t=1741855260',
-      name:'OnePlus Nord'
-    },
-    {
-     img:'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/200/200/feature_variant/6710/Google_Pixel_6a_spare_parts_accessories_by_maxbhi.jpeg?t=1741855434',
-     name:'Google Pixel 6a' 
-    },
-    {
-      img:'https://d57avc95tvxyg.cloudfront.net/images/thumbnails/200/200/feature_variant/2894/Apple_iPhone_XR_spare_parts_accessories_by_maxbhi.jpeg?t=1741856128',
-      name:'Apple iPhone XR'
-    }
-
-  ]
-
 const Navbar = ({
   
   logo = {
@@ -101,9 +73,6 @@ const handleInputValue = async(e: React.ChangeEvent<HTMLInputElement>) => {
     } catch (error) {
       console.log('Error during the error',error)
     }
-    // const filtered = data.filter((mobile) =>
-    //   mobile.name.toLowerCase().includes(trimmed.toLowerCase())
-    // );
     setMobiles([]);
   }, [debouncedText]);
 

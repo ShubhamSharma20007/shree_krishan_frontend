@@ -34,7 +34,7 @@ const stats = [
   { title: 'Total Brands', value: dashboardData?.totalBrands },
   { title: 'Total Products', value: dashboardData?.totalProducts },
   { title: 'Total Parts', value: dashboardData?.totalParts },
-  { title: 'Total Users', value: dashboardData?.totalUsers },
+  { title: 'Total Contacts', value: dashboardData?.totalUsers },
 ];
 
   const barData = dashboardData?.barData || [];

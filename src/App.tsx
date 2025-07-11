@@ -18,6 +18,7 @@ const BrandList = lazy(() => import('./pages/admin/BrandList'))
 const ProductPartList = lazy(() => import('./pages/admin/ProductPartList'))
 const Inventory = lazy(() => import('./pages/admin/Inventory'))
 const Report = lazy(() => import('./pages/admin/Report'))
+const Contact = lazy(() => import('./pages/admin/Contact'))
 import ProtectedRoute from './components/protectedRoute';
 import NotFound from './pages/NotFound'
 
@@ -66,6 +67,7 @@ export const App = () => {
             <Route path='product-part-list' element={<ProductPartList />} />
             <Route path='inventory' element={<Inventory />} />
             <Route path='report' element={<Report />} />
+            <Route path='contact-report' element={<Contact />} />
           </Route>
 
           <Route path='/login' element={<Login />} />

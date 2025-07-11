@@ -127,6 +127,7 @@ export default function Component() {
             <NavLink to="/admin/product-part-list" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Product Part List</NavLink>
             <NavLink to="/admin/inventory" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Update Inventory</NavLink>
             <NavLink to="/admin/report" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Stock Report</NavLink>
+            <NavLink to="/admin/contact-report" className="flex w-full items-center py-2 text-lg font-semibold"  onClick={()=>setIsSideBarOpen(false)}>Contact Report</NavLink>
 
 
           </div>
@@ -135,7 +136,7 @@ export default function Component() {
 
       <Link to="/admin/dashboard" className="mr-6 hidden lg:flex">
         <img src={logo2} className="text-lg h-20 w-25 font-semibold tracking-tighter" alt="Logo" />
-        <span className="sr-only">Shree Krishna Mobile Store</span>
+        <span className="sr-only">Shree Mobile Repairs</span>
       </Link>
       {/* Big Screen NavBar */}
       <nav className="ml-auto hidden lg:flex gap-6">
@@ -181,6 +182,13 @@ export default function Component() {
 
         >
           Stock Report
+        </NavLink>
+        <NavLink
+          to="/admin/contact-report"
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+
+        >
+          Contact Report
         </NavLink>
 
         {/* Notifications */}

@@ -209,6 +209,27 @@ const Dashboard = () => {
       </p>
     </div>
   </div>
+    {/* VIDEO SECTION — Showcase Your Work */}
+<div className="mt-20 container mx-auto px-4">
+  <h2 className="text-3xl font-bold text-center mb-6 text-foreground">
+    Watch Our Repair Work in Action
+  </h2>
+
+  <div className="max-w-4xl mx-auto rounded-xl overflow-hidden shadow-lg border dark:border-zinc-700">
+    <video
+  controls
+  className="w-full h-auto rounded-xl"
+  poster="https://via.placeholder.com/600x400.png?text=Mobile+Repair+Preview"
+>
+  <source
+    src="https://download.blender.org/peach/bigbuckbunny_movies/BigBuckBunny_320x180.mp4"
+    type="video/mp4"
+    />
+  Your browser does not support the video tag.
+</video>
+
+  </div>
+</div>
       {/* cards */}
       {/* <div className='px-2  mt-20 container mx-auto'>
         {
