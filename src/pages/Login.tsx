@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import BG from "@/assets/banner1.webp"
 import Cookies from 'js-cookie';
 import { LoaderIcon } from "lucide-react";
+import { Link } from "react-router-dom";
 export default function Login() {
   const navigate = useNavigate();
   const { fn: userLoginFn, data: loginRes, loading } = useFetch(LoginServiceInstance.userLogin);
@@ -51,18 +52,18 @@ export default function Login() {
         <div className="flex flex-col justify-center items-center p-6 text-white">
           <h1 className="text-4xl font-extrabold mb-2 text-center leading-tight drop-shadow-lg">Welcome to <br />Admin Dashboard</h1>
           <p className="text-lg mb-4 text-center text-white/90">Easily manage stock, monitor inventory, and access reports with a modern interface.</p>
-          <Button onClick={()=>navigate("/")} className="cursor-pointer bg-gradient-to-r from-black to-gray-800 hover:from-gray-900 hover:to-black text-white font-semibold py-2 rounded-xl transform hover:scale-105 transition-transform duration-300 shadow-lg">
+          <Button onClick={()=>navigate("/")} className="cursor-pointer bg-gradient-to-r from-black to-gray-800 hover:from-gray-900 hover:to-black text-white font-semibold rounded-xl transform hover:scale-105 transition-transform duration-300 shadow-lg">
             Explore More
           </Button>
 
         </div>
 
         {/* Right Section - Login Card */}
-        <div className="flex items-center justify-center p-8">
+        <div className="flex items-center justify-center p-6">
           <Card className="w-full max-w-sm rounded-2xl bg-white/80 border border-gray-300 shadow-lg">
-            <CardHeader className="text-center mb-4">
+            <CardHeader className="text-center">
               <CardTitle className="text-3xl font-bold text-gray-800">Admin Login</CardTitle>
-              <p className="text-gray-500 text-sm mt-2">Please sign in to continue</p>
+              <p className="text-gray-500 text-sm">Please sign in to continue</p>
             </CardHeader>
 
             <CardContent>
@@ -92,7 +93,7 @@ export default function Login() {
                 </div>
 
                 <div className="text-right text-sm">
-                  <a href="#" className="text-indigo-600 hover:underline">Forgot password?</a>
+                  <Link to={'/forgot-password'} className="text-indigo-600 hover:underline">Forgot password?</Link>
                 </div>
 
                 <Button

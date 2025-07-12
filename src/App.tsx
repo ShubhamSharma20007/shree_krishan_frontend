@@ -21,6 +21,9 @@ const Report = lazy(() => import('./pages/admin/Report'))
 const Contact = lazy(() => import('./pages/admin/Contact'))
 import ProtectedRoute from './components/protectedRoute';
 import NotFound from './pages/NotFound'
+import ForgotPassword from './pages/ForgotPassword'
+import VerifyOtp from './pages/VerifyOtp'
+import ResetPassword from './pages/ResetPassword'
 
 
 const Loader =()=><div className='min-h-screen flex items-center justify-center w-full'>
@@ -49,7 +52,7 @@ export const App = () => {
 
   return (
     <>
-      {pathname !== "/login" && !pathname.startsWith('/admin') && <Navbar />}
+      {pathname !== "/login" && !pathname.startsWith('/admin') && pathname !== '/forgot-password' && pathname !== '/verify-otp' && pathname !== '/reset-password' && <Navbar />}
 
       <Suspense fallback={<Loader/>}>
         <Routes>
@@ -71,11 +74,14 @@ export const App = () => {
           </Route>
 
           <Route path='/login' element={<Login />} />
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/verify-otp' element={<VerifyOtp />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
           <Route path='*' element={<NotFound />} />
         </Routes>
       </Suspense>
 
-      {pathname !== "/login" && !pathname.startsWith('/admin') && <Footer />}
+      {pathname !== "/login" && !pathname.startsWith('/admin') && pathname !== '/forgot-password' && pathname !== '/verify-otp' && pathname !== '/reset-password' && <Footer />}
     </>
   )
 }
