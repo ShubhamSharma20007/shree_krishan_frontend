@@ -48,9 +48,9 @@ export default function Login() {
       <div className="relative z-10 w-full max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl border border-white/20 bg-white/10 backdrop-blur-lg">
 
         {/* Left Section */}
-        <div className="md:flex flex-col justify-center items-center p-10 text-white">
-          <h1 className="text-4xl font-extrabold mb-4 text-center leading-tight drop-shadow-lg">Welcome to <br />Admin Dashboard</h1>
-          <p className="text-lg mb-6 text-center text-white/90">Easily manage stock, monitor inventory, and access reports with a modern interface.</p>
+        <div className="flex flex-col justify-center items-center p-6 text-white">
+          <h1 className="text-4xl font-extrabold mb-2 text-center leading-tight drop-shadow-lg">Welcome to <br />Admin Dashboard</h1>
+          <p className="text-lg mb-4 text-center text-white/90">Easily manage stock, monitor inventory, and access reports with a modern interface.</p>
           <Button onClick={()=>navigate("/")} className="cursor-pointer bg-gradient-to-r from-black to-gray-800 hover:from-gray-900 hover:to-black text-white font-semibold py-2 rounded-xl transform hover:scale-105 transition-transform duration-300 shadow-lg">
             Explore More
           </Button>
