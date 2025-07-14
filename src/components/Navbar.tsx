@@ -105,14 +105,14 @@ const handleInputValue = async(e: React.ChangeEvent<HTMLInputElement>) => {
 
     {/* Right Side Buttons (mobile stacked beside logo) */}
     <div className="flex gap-2 items-center lg:hidden ">
-      <Button
+      {/* <Button
         variant="outline"
         size="icon"
         className=" border-accent-foreground/40"
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       >
         {theme === "light" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
-      </Button>
+      </Button> */}
 
       <Button asChild variant="outline" size="sm" className="border-accent-foreground/40 ">
         {token ? (
