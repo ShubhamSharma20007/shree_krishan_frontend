@@ -16,9 +16,9 @@ import Brand from "@/assets/brand.png"
 import Mobile from "@/assets/mobile.png"
 import Part from "@/assets/parts.png"
 import Battery from '@/assets/battery.jpg'
-import Screen from "@/assets/screen.jpg"
-import Accessories from "@/assets/accessories.jpg"
-import PartImg from  "@/assets/parts.png"
+import Screen from "@/assets/screen1.jpeg"
+import Accessories from "@/assets/accessories.jpeg"
+import PartImg from  "@/assets/internal_parts.jpeg"
   // const parts = [
   //   {
   //     title: 'Spare Parts',
