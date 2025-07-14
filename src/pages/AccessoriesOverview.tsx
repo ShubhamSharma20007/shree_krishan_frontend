@@ -82,21 +82,29 @@ const AccessoriesOverview = () => {
 
       {/* Main Product Part Detail */}
       <div className="mt-10 flex flex-col lg:flex-row items-start gap-10">
-        {productPart?.images?.[0] && (
-          <Card className='w-100 h-100 bg-transparent border-0'>
-            <img
-              src={`${VITE_BASE_URL}/uploads/${productPart.images[0]}`}
-              alt={productPart.partName}
-              className="w-full h-full object-contain rounded-xl"
-            />
-          </Card>
-        )}
+      {productPart?.images?.[0] && (
+      <div className="relative w-full max-w-md">
+        <img
+          src={`${VITE_BASE_URL}/uploads/${productPart.images[0]}`}
+          alt={productPart.partName}
+          className={`w-full h-auto object-contain rounded-xl ${productPart.availableQty < 1 ? 'blur-xs' : ''}`}
+        />
+{/* 
+        {productPart.availableQty < 1 && (
+          <img
+            src="https://t4.ftcdn.net/jpg/02/65/83/15/360_F_265831541_RUAcAGkikMs2WJOZ40D1BzjWqyp0MRze.jpg"
+            alt="Out of Stock"
+            className="absolute top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 object-contain"
+          />
+        )} */}
+      </div>
+      )}
 
         <div className="flex-1">
           <h2 className="text-3xl font-bold text-foreground mb-2 capitalize flex items-center gap-5">
             {productPart?.partName}
             {
-              Boolean(0)  && <img className='h-12' src="https://t4.ftcdn.net/jpg/02/65/83/15/360_F_265831541_RUAcAGkikMs2WJOZ40D1BzjWqyp0MRze.jpg" alt="" />
+              productPart?.availableQty < 1 && <img className='h-12' src="https://t4.ftcdn.net/jpg/02/65/83/15/360_F_265831541_RUAcAGkikMs2WJOZ40D1BzjWqyp0MRze.jpg" alt="" />
             }
           </h2>
           <h3 className="text-lg text-foreground/70 mb-6 capitalize">
