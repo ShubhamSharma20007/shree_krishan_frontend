@@ -46,7 +46,7 @@ useEffect(()=>{
   return (
    <Dialog open={isOpen} onOpenChange={setIsOpen}>
   <DialogTrigger asChild>
-    <Button variant="link" className="cursor-pointer">Click here for Contact Us</Button>
+    <Button variant="link" className="cursor-pointer">Click here for Contact & Appointment</Button>
   </DialogTrigger>
   <DialogContent className="sm:max-w-md">
     <form onSubmit={handleSubmit} ref={formRef}>
@@ -116,15 +116,12 @@ const Footer = () => {
 
       <footer className="rounded-lg bg-zinc-100 my-10 shadow-sm m-4 dark:bg-zinc-900 py-5">
         <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
-          <span className="text-sm  sm:text-center dark:text-gray-400 text-black">
-            © 2025{" "}
-
-           
-            . Developed by Shubham & Sumit with ❤️
-          </span>
           <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
             <DialogCloseButton isOpen={isOpen} setIsOpen={setIsOpen} />
           </ul>
+          <span className="text-sm  sm:text-center dark:text-gray-400 text-black">
+            © 2025{" "}. Developed by Shubham & Sumit with ❤️
+          </span>
         </div>
       </footer>
     </>
