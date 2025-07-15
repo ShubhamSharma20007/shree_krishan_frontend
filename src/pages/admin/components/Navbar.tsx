@@ -70,19 +70,26 @@ export default function Component() {
             <DropdownMenuSeparator />
 
             {notifications.length > 0 ? (
-          notifications.map((alert, index) =>{
-            return(
-            <DropdownMenuItem key={index} className="flex flex-col items-start">
-              <span className="text-sm font-medium capitalize">
+          notifications.map((alert, index) => (
+            <DropdownMenuItem key={index} className="flex flex-col items-start px-3 py-2 rounded-md hover:bg-indigo-50 transition duration-200">
+            <div className="flex items-center justify-between w-full">
+              <span className="text-sm font-medium text-gray-700 capitalize">
                 {alert.productName} - {alert.productPartName}
               </span>
-              <span className="text-lg text-muted-foreground">
-                Stock Left: {alert.stockQuantity }
-              </span>
-            </DropdownMenuItem>
-          )
-          })
-        ) : (
+    
+              {alert.expDate && (
+                <span className="ml-2 px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 font-medium rounded-md">
+                  Exp Date: {new Date(alert.expDate).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+    
+            <span className="mt-1 px-2 py-0.5 text-xs bg-green-100 text-green-700 font-medium rounded-md">
+              Stock Left: {alert.stockQuantity}
+            </span>
+          </DropdownMenuItem>
+        ))
+      ) : (
               <DropdownMenuItem>No new notifications</DropdownMenuItem>
             )}
           </DropdownMenuContent>
@@ -209,16 +216,25 @@ export default function Component() {
 
             {notifications.length > 0 ? (
           notifications.map((alert, index) => (
-            <DropdownMenuItem key={index} className="flex flex-col items-start">
-              <span className="text-sm font-medium capitalize">
+            <DropdownMenuItem key={index} className="flex flex-col items-start px-3 py-2 rounded-md hover:bg-indigo-50 transition duration-200">
+            <div className="flex items-center justify-between w-full">
+              <span className="text-sm font-medium text-gray-700 capitalize">
                 {alert.productName} - {alert.productPartName}
               </span>
-              <span className="text-xs text-muted-foreground">
-                Stock Left: {alert.stockQuantity}
-              </span>
-            </DropdownMenuItem>
-          ))
-        ) : (
+    
+              {alert.expDate && (
+                <span className="ml-2 px-2 py-0.5 text-xs bg-yellow-100 text-yellow-700 font-medium rounded-md">
+                  Exp Date: {new Date(alert.expDate).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+    
+            <span className="mt-1 px-2 py-0.5 text-xs bg-green-100 text-green-700 font-medium rounded-md">
+              Stock Left: {alert.stockQuantity}
+            </span>
+          </DropdownMenuItem>
+        ))
+      ) : (
               <DropdownMenuItem>No new notifications</DropdownMenuItem>
             )}
           </DropdownMenuContent>
