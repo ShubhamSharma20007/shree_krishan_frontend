@@ -3,8 +3,8 @@ import { Navbar } from './components/Navbar'
 import Footer from './components/Footer'
 import { lazy, Suspense, useEffect } from 'react'
 
-import Dashboard from './pages/Dashboard'
-import Products from './pages/Products'
+const Products = lazy(() => import('./pages/Products'))
+const AllBrands = lazy(() => import('./pages/AllBrands'))
 import SparePartsAndAccessories from './pages/SparePartsAndAccessories'
 import AccessoriesOverview from './pages/AccessoriesOverview'
 import SellProductDashboard from './pages/SellProduct'
@@ -13,6 +13,7 @@ import Login from './pages/Login'
 import Layout from './pages/admin/Layout'
 import { ProgressBar } from 'react-loader-spinner';
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'))
+const Dashboard = lazy(() => import('./pages/Dashboard'))
 const Listing = lazy(() => import('./pages/admin/Listing'))
 const BrandList = lazy(() => import('./pages/admin/BrandList'))
 const ProductPartList = lazy(() => import('./pages/admin/ProductPartList'))
@@ -58,6 +59,7 @@ export const App = () => {
         <Routes>
           <Route path='/' element={<Dashboard />} />
           <Route path='/products' element={<Products />} />
+          <Route path='/allBrands' element={<AllBrands />} />
           <Route path='/accessories/:device' element={<SparePartsAndAccessories />} />
           <Route path='/:device/:partdetail/:partId' element={<AccessoriesOverview />} />
           <Route path='/sellproduct' element={<SellProductDashboard />} />
