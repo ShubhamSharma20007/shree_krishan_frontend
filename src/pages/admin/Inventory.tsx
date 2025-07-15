@@ -170,7 +170,9 @@ useEffect(() => {
                   <Label htmlFor="productId" className="mb-3">Product Name</Label>
                   <SearchableDropdown
                     className="capitalize"
-                    placeholder="Select Product"
+                    placeholder={
+                      window.innerWidth < 768 ? "Search" : "Select Product"
+                    }
                     name="productId"
                     options={products.map((item: any) => ({
                       value: item._id,
@@ -198,7 +200,8 @@ useEffect(() => {
                   <SearchableDropdown
                     className="capitalize"
                     name="productPartId"
-                    placeholder="Select Product Part"
+                    placeholder={
+                      window.innerWidth < 768 ? "Search" : "Select Product Part"}
                     options={getSpecificProductPartsRes?.productParts?.map((item: any) => ({
                       value: item._id,
                       label: item.partName,
@@ -210,7 +213,7 @@ useEffect(() => {
                   />
                 </div>
 
-                <div>
+                <div className='flex flex-col justify-between'>
                   <Label htmlFor="qty" className="mb-3">Quantity</Label>
                   <Input
                     id="qty"
@@ -222,7 +225,7 @@ useEffect(() => {
                   />
                 </div>
 
-                <div>
+                <div className='flex flex-col justify-between'>
                   <Label htmlFor="remark" className="mb-3">Remark</Label>
                   <Input
                     id="remark"
@@ -243,7 +246,7 @@ useEffect(() => {
                   <div>
                     <SearchableDropdown
                       className="capitalize"
-                      placeholder="Select Product"
+                      placeholder={window.innerWidth < 768 ? "Search" :"Select Product"}
                       name={`productId-${index + 1}`}
                       options={products.map((item: any) => ({
                         value: item._id,
@@ -270,7 +273,7 @@ useEffect(() => {
                     <SearchableDropdown
                       className="capitalize"
                       name={`productPartId-${index + 1}`}
-                      placeholder="Select Product Part"
+                      placeholder={window.innerWidth < 768 ? "Search" :"Select Product Part"}
                       options={getSpecificProductPartsRes?.productParts?.map((item: any) => ({
                         value: item._id,
                         label: item.partName,
@@ -289,7 +292,7 @@ useEffect(() => {
                     />
                   </div>
 
-                  <div>
+                  <div className='flex flex-col justify-between'>
                     <Input
                       id={`qty-${index + 1}`}
                       name={`qty-${index + 1}`}
@@ -301,7 +304,7 @@ useEffect(() => {
                     />
                   </div>
 
-                  <div>
+                  <div className='flex flex-col justify-between'>
                     <Input
                       id={`remark-${index + 1}`}
                       name={`remark-${index + 1}`}
@@ -400,7 +403,7 @@ console.log(partOptions,12)
                   <SearchableDropdown
                   isDisabled
                   className='capitalize'
-              placeholder="Select Product"
+              placeholder=""
               options={products.map((p) => ({ value: p._id, label: p.itemName }))}
               value={products.find((p) => p._id === productId) && {
                 value: productId,
@@ -419,7 +422,7 @@ console.log(partOptions,12)
                   <SearchableDropdown
                   isDisabled
                     className='capitalize'
-              placeholder="Select Part"
+              placeholder=""
               options={partOptions && partOptions?.productParts?.map((part: any) => ({ value: part._id, label: part.partName }))}
               value={
                partOptions && partOptions?.productParts?.find((p: any) => p._id === productPartId) && {
@@ -431,12 +434,12 @@ console.log(partOptions,12)
             />
                 </div>
 
-                <div>
+                <div className='flex flex-col justify-between'>
                   <Label htmlFor="qty" className="mb-3">Quantity</Label>
                  <Input type="number" value={qty} onChange={(e) => setQty(e.target.value)} />
                 </div>
 
-                <div>
+                <div className='flex flex-col justify-between'>
                   <Label htmlFor="remark" className="mb-3">Remark</Label>
                     <Input value={remark}
                     disabled
@@ -596,7 +599,9 @@ const DeductInventory = () => {
                     )}
                     <SearchableDropdown
                       className="capitalize"
-                      placeholder="Select Product"
+                      placeholder={
+                        window.innerWidth  < 768 ? '': "Select Product"
+                      }
                       name={`productId-${index}`}
                       value={
                         deductProductRes
@@ -624,7 +629,9 @@ const DeductInventory = () => {
                     <SearchableDropdown
                       className="capitalize"
                       name={`productPartId-${index}`}
-                      placeholder="Select Product Part"
+                      placeholder={
+                        window.innerWidth < 768 ?'':  'Select Product Part'
+                      }
                       value={
                         (productPartOptions[index] || [])
                           .map((item) => ({
@@ -639,13 +646,13 @@ const DeductInventory = () => {
                       }))}
                       onChange={(option) => handleProductPartChange(option, index)}
                     />
-                    <span className="inline-block font-semibold float-end text-[10px] mt-1 text-green-600 bg-gray-100 px-2 py-1 rounded-md">
-                      Available Stock Qty: {stockQuantities[index] ?? 0}
+                    <span className="inline-block whitespace-nowrap font-semibold float-end text-[8px] md:text-[10px] mt-1 text-green-600 bg-gray-100 px-2 py-1 rounded-md">
+                      Ava. Qty: {stockQuantities[index] ?? 0}
                     </span>
                   </div>
 
                   {/* Quantity Input */}
-                  <div>
+                  <div className='flex flex-col justify-between' style={{marginBottom:'27px'}}>
                     {index === 0 && (
                       <Label htmlFor={`qty-${index}`} className="mb-3">
                         Quantity
@@ -668,7 +675,7 @@ const DeductInventory = () => {
                   </div>
 
                   {/* Remark Input */}
-                  <div>
+                  <div className='flex flex-col justify-between' style={{marginBottom:'27px'}}>
                     {index === 0 && (
                       <Label htmlFor={`remark-${index}`} className="mb-3">
                         Remark
