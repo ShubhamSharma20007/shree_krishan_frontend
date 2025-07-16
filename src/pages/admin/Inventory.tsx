@@ -213,7 +213,21 @@ console.log(shouldShowExpire)
                     />
                   </div>
 
-                  <div className='flex flex-col justify-between'>
+  
+  <div className="flex flex-col justify-between">
+    <Label htmlFor="expireDate" className="mb-3">Expiry Date</Label>
+    <Input
+      id="expireDate"
+      name="expDate"
+      disabled={!shouldShowExpire[0]}
+      type="date"
+      className="px-3"
+      onChange={(e) => updateRow(0, "expDate", e.target.value)}
+      required
+    />
+  </div>
+
+  <div className='flex flex-col justify-between'>
                     <div>
                       <div>
                         <Label htmlFor="qty" className="mb-3">Quantity</Label>
@@ -228,20 +242,6 @@ console.log(shouldShowExpire)
                       </div>
                     </div>
                   </div>
-
-  
-  <div className="flex flex-col justify-between">
-    <Label htmlFor="expireDate" className="mb-3 font-semibold text-red-500">Expiry Date</Label>
-    <Input
-      id="expireDate"
-      name="expDate"
-      disabled={!shouldShowExpire[0]}
-      type="date"
-      className="px-3 border border-red-400"
-      onChange={(e) => updateRow(0, "expDate", e.target.value)}
-      required
-    />
-  </div>
                   <div className='flex flex-col justify-between'>
                     <Label htmlFor="remark" className="mb-3">Remark</Label>
                     <Input
@@ -316,6 +316,19 @@ console.log(shouldShowExpire)
                     </div>
 
                     <div className='flex flex-col justify-between'>
+                        <Input
+                          // onChange={(e) => setExpiryDate((e.target.value as any))}
+                          id={`expDate-${index+1}`}
+                          className='px-3'
+                          type='date'
+                          disabled={!shouldShowExpire[index+1]}
+                          name={`expDate-${index+1}`}
+                          required
+                        />
+                  
+                  </div>
+
+                    <div className='flex flex-col justify-between'>
                       <Input
                         id={`qty-${index + 1}`}
                         name={`qty-${index + 1}`}
@@ -326,18 +339,6 @@ console.log(shouldShowExpire)
                         onChange={(e) => updateRow(index + 1, "qty", e.target.value)}
                       />
                     </div>
-                     <div className='flex flex-col justify-between'>
-                        <Input
-                          // onChange={(e) => setExpiryDate((e.target.value as any))}
-                          id={`expDate-${index+1}`}
-                          className='px-3 border-red-400'
-                          type='date'
-                          disabled={!shouldShowExpire[index+1]}
-                          name={`expDate-${index+1}`}
-                          required
-                        />
-                  
-                  </div>
 
 
                     <div className='flex flex-col justify-between'>
@@ -480,14 +481,14 @@ console.log(shouldShowExpire)
               
           {
             date &&             <div className="flex flex-col justify-between">
-    <Label htmlFor="expireDate" className="mb-3 font-semibold text-red-500">Expiry Date</Label>
+    <Label htmlFor="expireDate" className="mb-3">Expiry Date</Label>
     <Input
       id="expireDate"
       name="expDate"
       disabled={!date.length}
       value={new Date(date).toISOString().split('T')[0] || new Date().toISOString().split('T')[0] }
       type="date"
-      className="px-3 border border-red-400"
+      className="px-3"
       onChange={(e) => setDate( e.target.value)}
       required
     />
