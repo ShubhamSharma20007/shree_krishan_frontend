@@ -310,7 +310,7 @@ console.log(shouldShowExpire)
                       const updatedVisibility = [...shouldShowExpire];
                       updatedVisibility[index+1] = !!isBattery;
                       setShouldShowExpire(updatedVisibility);
-                    updateRow(index + 1, "productPartId", option?.value)
+                      updateRow(index + 1, "productPartId", option?.value)
                         }
                         }
                       />
@@ -318,12 +318,12 @@ console.log(shouldShowExpire)
 
                     <div className='flex flex-col justify-between'>
                         <Input
-                          onChange={(e) => updateRow(index + 1, "expDate", e.target.value)}
                           id={`expDate-${index+1}`}
                           className='px-3'
                           type='date'
                           disabled={!shouldShowExpire[index+1]}
                           name={`expDate-${index+1}`}
+                          onChange={(e) => updateRow(index + 1, "expDate", e.target.value)}
                           required
                         />
                   
@@ -738,7 +738,7 @@ console.log(shouldShowExpire)
                         onChange={(option) => {
                           const isBattery = option.label.toLowerCase() === 'battery';
                           const updatedVisibility = [...shouldShowExpire];
-                          updatedVisibility[0] = !!isBattery;
+                          updatedVisibility[index] = !!isBattery;
                           setShouldShowExpire(updatedVisibility);
                           handleProductPartChange(option, index)
                         }}
@@ -758,7 +758,7 @@ console.log(shouldShowExpire)
                       )}
                       <SearchableDropdown
                         className="capitalize"
-                        
+                        isDisabled={!shouldShowExpire[index]}
                         name={`expDate-${index}`}
                         placeholder={
                           window.innerWidth < 768 ? '' : 'Select Expiry Date'
