@@ -205,9 +205,7 @@ const ProductPartList = () => {
     const formRef = useRef<HTMLFormElement>(null);
     const [products, _, loading] = useProducts();
     const [category, setCategory] = useState('');
-    const [expiryDate,setExpiryDate] = useState<Date | null>(null)
     const [selectedProductId, setSelectedProductId] = useState('');
-console.log(createProductPartRes)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -216,7 +214,6 @@ console.log(createProductPartRes)
       formData.delete('expDate');
       formData.append('productId', selectedProductId);
       formData.append('category', category);
-      formData.append('expDate', new Date(expiryDate).toISOString());
 
       try {
         await createProductPartFn(formData);
@@ -225,7 +222,6 @@ console.log(createProductPartRes)
       }
     };
 
-    console.log(createProductPartRes)
     useEffect(() => {
       if (createProductPartRes) {
         setParts((prev: any) => [
@@ -292,20 +288,6 @@ console.log(createProductPartRes)
                 </SelectContent>
               </Select>
             </div>
-
-              {
-              category.toLowerCase() === 'battery' &&  <div className="grid gap-3">
-              <Label htmlFor="description">Expiry Date</Label>
-              <Input
-              onChange={(e) => setExpiryDate((e.target.value as any))}
-                id="Expire"
-                type='date'
-                name="expDate"
-                required
-              />
-            </div>
-
-            }
             <div className="grid gap-3">
               <Label htmlFor="brandName">Part Name</Label>
               <Input id="brandName" name="partName" placeholder="Screen" required />
@@ -368,9 +350,7 @@ console.log(createProductPartRes)
     const formRef = useRef<HTMLFormElement>(null);
     const [products] = useProducts();
     const [category, setCategory] = useState('');
-      const [expiryDate,setExpiryDate] = useState<Date | null>(null)
     const [selectedProductId, setSelectedProductId] = useState('');
-console.log({selectedProduct},{parts})
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(formRef.current as HTMLFormElement);
@@ -378,8 +358,6 @@ console.log({selectedProduct},{parts})
       formData.delete('expDate');
       formData.set('productId', selectedProductId);
       formData.set('category', category);
-      
-      formData.append('expDate', new Date(expiryDate).toISOString());
 
       try {
         await updateProductPartFn(selectedProduct._id, formData);
@@ -442,22 +420,6 @@ console.log({selectedProduct},{parts})
               </Select>
             </div>
 
-
-              {
-              category.toLowerCase() === 'battery' &&  <div className="grid gap-3">
-              <Label htmlFor="description">Expiry Date</Label>
-              <Input
-                id="Expire"
-                onChange={(e) => setExpiryDate((e.target.value as any))}
-                defaultValue={getValidDate(selectedProduct?.expDate)}
-                type='date'
-                name="expDate"
-                required
-              />
-            </div>
-
-            }
-
             <div className="grid gap-3">
               <Label htmlFor="partName">Part Name</Label>
               <Input
@@ -467,9 +429,6 @@ console.log({selectedProduct},{parts})
                 required
               />
             </div>
-
-            
-          
 
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>

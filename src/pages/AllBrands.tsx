@@ -23,7 +23,7 @@ function useQuery() {
   return new URLSearchParams(search);
 }
 
-const Products = () => {
+const AllBrands = () => {
   const query = useQuery();
   const brand = query.get('brand') || '';
   const [inputValue, setInputValue] = useState('');
@@ -132,4 +132,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default AllBrands;
