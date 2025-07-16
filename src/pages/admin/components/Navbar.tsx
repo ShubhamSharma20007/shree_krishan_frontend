@@ -2,7 +2,7 @@
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { NavLink } from "react-router-dom"
-import logo2 from '@/assets/logo2.png'
+import logo2 from '@/assets/logoRed.png'
 import { Link } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "../../../components/ui/avatar"
 import { BellIcon } from "lucide-react"
@@ -142,7 +142,7 @@ export default function Component() {
       </Sheet>
 
       <Link to="/admin/dashboard" className="mr-6 hidden lg:flex">
-        <img src={logo2} className="text-lg h-20 w-25 font-semibold tracking-tighter" alt="Logo" />
+        <img src={logo2} className="text-lg h-12 w-25 font-semibold tracking-tighter" alt="Logo" />
         <span className="sr-only">Shree Mobile Repairs</span>
       </Link>
       {/* Big Screen NavBar */}

@@ -7,7 +7,7 @@ import { Card } from "./ui/card";
 import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import logo1 from '@/assets/logo1.png'
-import logo2 from '@/assets/logo2.png'
+import logo2 from '@/assets/logoRed.png'
 import ProductServiceInstance from "../../service/product.service"
 import { useFetch } from "@/hooks/useFetch";
 import Cookies from 'js-cookie';
@@ -98,7 +98,7 @@ const handleInputValue = async(e: React.ChangeEvent<HTMLInputElement>) => {
     <Link to="/" className="flex items-center gap-2">
       <img
         src={theme === "light" ? logo2 : logo1}
-        className="text-lg h-20 w-25 font-semibold tracking-tighter"
+        className="text-lg h-12 w-25 font-semibold tracking-tighter"
         alt="logo"
       />
     </Link>
