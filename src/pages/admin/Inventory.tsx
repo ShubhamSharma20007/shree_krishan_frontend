@@ -84,7 +84,7 @@ const Inventory = () => {
     const handleClone = () => {
       setInventoryRows((prev: any) => [
         ...prev,
-        { productId: "", productPartId: "", qty: "", remark: "" },
+        { productId: "", productPartId: "", expDate:"",  qty: "", remark: "" },
       ]);
     };
 
@@ -181,6 +181,7 @@ console.log(shouldShowExpire)
                             productId: option?.value,
                             productPartId: "",
                             qty: "",
+                            expDate: "",
                             remark: "",
                           },
                         ])
@@ -214,20 +215,20 @@ console.log(shouldShowExpire)
                   </div>
 
   
-  <div className="flex flex-col justify-between">
-    <Label htmlFor="expireDate" className="mb-3">Expiry Date</Label>
-    <Input
-      id="expireDate"
-      name="expDate"
-      disabled={!shouldShowExpire[0]}
-      type="date"
-      className="px-3"
-      onChange={(e) => updateRow(0, "expDate", e.target.value)}
-      required
-    />
-  </div>
+                  <div className="flex flex-col justify-between">
+                    <Label htmlFor="expireDate" className="mb-3">Expiry Date</Label>
+                    <Input
+                      id="expireDate"
+                      name="expDate"
+                      disabled={!shouldShowExpire[0]}
+                      type="date"
+                      className="px-3"
+                      onChange={(e) => updateRow(0, "expDate", e.target.value)}
+                      required
+                    />
+                  </div>
 
-  <div className='flex flex-col justify-between'>
+                   <div className='flex flex-col justify-between'>
                     <div>
                       <div>
                         <Label htmlFor="qty" className="mb-3">Quantity</Label>
@@ -317,7 +318,7 @@ console.log(shouldShowExpire)
 
                     <div className='flex flex-col justify-between'>
                         <Input
-                          // onChange={(e) => setExpiryDate((e.target.value as any))}
+                          onChange={(e) => updateRow(index + 1, "expDate", e.target.value)}
                           id={`expDate-${index+1}`}
                           className='px-3'
                           type='date'
@@ -534,14 +535,19 @@ console.log(shouldShowExpire)
     const formRef = useRef(null);
     const [open, setOpen] = useState(false);
     const [deductInventoryRows, setDeductInventoryRows] = useState([
-      { productId: "", productPartId: "", qty: "", remark: "" }
+      { productId: "", productPartId: "", expDate:"", qty: "", remark: "" }
     ]);
 
     const [productPartOptions, setProductPartOptions] = useState<Record<number, any[]>>({});
-    const [stockQuantities, setStockQuantities] = useState<Record<number, number>>({});
+    const [expDateOptions, setExpDateOptions] = useState<Record<number, any[]>>({});
+    console.log(expDateOptions,'expdates')
+    const [stockQuantities, setStockQuantities] = useState<Record<number, number>>({}); 
+    const [expDateStockQuantities, setExpDateStockQuantities] = useState<Record<number, number>>({});
     const { fn: deductProductFn, data: deductProductRes, loading: deductProductLoading } = useFetch(InventoryServiceInstance.deductProductName);
 
     const { fn: deductInventoryFn, data: deductInventoryRes, loading: deductInventoryLoading } = useFetch(InventoryServiceInstance.deductInventory);
+
+    const { fn: deductExpDateFn, data: deductExpDateRes, loading: deductExpDateLoading } = useFetch(InventoryServiceInstance.deductExpDate);
 
     useEffect(() => {
       deductProductFn();
@@ -553,7 +559,7 @@ console.log(shouldShowExpire)
      
       setDeductInventoryRows((prev) => [
         ...prev,
-        { productId: "", productPartId: "", qty: "", remark: "" },
+        { productId: "", productPartId: "", expDate:"", qty: "", remark: "" },
       ]);
     };
      console.log(deductInventoryRows, 1111)
@@ -601,8 +607,25 @@ console.log(shouldShowExpire)
       const { productId } = deductInventoryRows[index];
       if (productId && option?.value) {
         try {
-          const res = await InventoryServiceInstance.calculateStockQuanty(productId, option.value);
+          const res = await InventoryServiceInstance.calculateStockQuanty(productId, option.value, '');
           setStockQuantities((prev) => ({ ...prev, [index]: res?.stockQuantity || 0 }));
+
+          const expDateRes = await InventoryServiceInstance.deductExpDate(productId, option.value);
+          setExpDateOptions((prev) => ({ ...prev, [index]: expDateRes || [] }));
+        } catch (error) {
+          console.error("Error fetching stock quantity", error);
+        }
+      }
+    };
+
+    const handleExpDateChange = async (option, index) => {
+      updateRow(index, "expDate", option?.value);
+
+      const { productId, productPartId } = deductInventoryRows[index];
+      if (productId && productPartId && option?.value) {
+        try {
+          const res = await InventoryServiceInstance.calculateStockQuanty(productId,productPartId, option.value);
+          setExpDateStockQuantities((prev) => ({ ...prev, [index]: res?.stockQuantity || 0 }));
         } catch (error) {
           console.error("Error fetching stock quantity", error);
         }
@@ -637,6 +660,8 @@ console.log(shouldShowExpire)
       }
     }, [deductInventoryRes])
 
+    const [shouldShowExpire, setShouldShowExpire] = useState<boolean[]>([]);
+
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
@@ -653,7 +678,7 @@ console.log(shouldShowExpire)
             <div className="grid gap-3">
               {deductInventoryRows.map((row, index) => (
                 <div key={index} className="flex items-center justify-between gap-3 customDiv">
-                  <div className="grid grid-cols-4 gap-4 w-full">
+                  <div className={`grid grid-cols-5 gap-4 w-full`}>
 
                     {/* Product Select */}
                     <div>
@@ -693,6 +718,7 @@ console.log(shouldShowExpire)
                       )}
                       <SearchableDropdown
                         className="capitalize"
+                        
                         name={`productPartId-${index}`}
                         placeholder={
                           window.innerWidth < 768 ? '' : 'Select Product Part'
@@ -709,10 +735,53 @@ console.log(shouldShowExpire)
                           value: item?._id,
                           label: item?.partName,
                         }))}
-                        onChange={(option) => handleProductPartChange(option, index)}
+                        onChange={(option) => {
+                          const isBattery = option.label.toLowerCase() === 'battery';
+                          const updatedVisibility = [...shouldShowExpire];
+                          updatedVisibility[0] = !!isBattery;
+                          setShouldShowExpire(updatedVisibility);
+                          handleProductPartChange(option, index)
+                        }}
+                        
                       />
                       <span className="inline-block whitespace-nowrap font-semibold float-end text-[8px] md:text-[10px] mt-1 text-green-600 bg-gray-100 px-2 py-1 rounded-md">
-                        Ava. Qty: {stockQuantities[index] ?? 0}
+                        Av. Qty: {stockQuantities[index] ?? 0}
+                      </span>
+                    </div>
+
+                    {/* Exp date Select */}
+                    <div>
+                      {index === 0 && (
+                        <Label htmlFor={`expDate-${index}`} className="mb-3">
+                          Expiry Date
+                        </Label>
+                      )}
+                      <SearchableDropdown
+                        className="capitalize"
+                        
+                        name={`expDate-${index}`}
+                        placeholder={
+                          window.innerWidth < 768 ? '' : 'Select Expiry Date'
+                        }
+                        value={
+                          (expDateOptions[index] || [])
+                            .map((item) => ({
+                              value: item,
+                              label: new Date(item).toLocaleDateString()
+                            }))
+                            .find((option) => option.value === row.expDate) || null
+                        }
+                        options={(expDateOptions[index] || []).map((item) => ({
+                          value: item,
+                          label: new Date(item).toLocaleDateString(),
+                        }))}
+                        onChange={(option) => {
+                          handleExpDateChange(option, index)
+                        }}
+                        
+                      />
+                      <span className="inline-block whitespace-nowrap font-semibold float-end text-[8px] md:text-[10px] mt-1 text-green-600 bg-gray-100 px-2 py-1 rounded-md">
+                        Av. Qty: {expDateStockQuantities[index] ?? 0}
                       </span>
                     </div>
 
@@ -731,11 +800,23 @@ console.log(shouldShowExpire)
                         required
                         value={row.qty}
                         onChange={(e: any) => {
-                          if (stockQuantities[index] < e.target.value) {
-                            toast.error(`Quantity cannot be greater than available stock ${stockQuantities[index]} quantity`)
+                          const enteredQty = Number(e.target.value);
+                      
+                          // Check if expiry date is selected
+                          const isExpDateEnabled = !!deductInventoryRows[index].expDate;
+                      
+                          const availableQty = isExpDateEnabled
+                            ? expDateStockQuantities[index] ?? 0
+                            : stockQuantities[index] ?? 0;
+                      
+                          if (enteredQty > availableQty) {
+                            toast.error(
+                              `Quantity cannot be greater than available stock: ${availableQty}`
+                            );
                             return;
                           }
-                          updateRow(index, "qty", e.target.value)
+                      
+                          updateRow(index, "qty", enteredQty);
                         }}
                       />
                     </div>

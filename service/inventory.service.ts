@@ -19,8 +19,11 @@ class InventroyService {
      deductProductPartNameById(productId:string):Promise<any>{
         return instance.get('/inventory/productParts/'+productId).then(res=>res.data?.productParts || res.data)
     };
-    calculateStockQuanty(productId:string,productPartId:string):Promise<any>{
-        return instance.post('/inventory/calculateStock',{productId,productPartId}).then(res=>res.data?.productParts || res.data)
+    deductExpDate(productId:string,productPartId:string):Promise<any>{
+        return instance.post('/inventory/getExpDates',{productId,productPartId}).then(res=>res.data?.expDates || res.data)
+    };
+    calculateStockQuanty(productId:string,productPartId:string,expDate:string):Promise<any>{
+        return instance.post('/inventory/calculateStock',{productId,productPartId,expDate}).then(res=>res.data?.productParts || res.data)
     };
     deductInventory(items:any[]){
         return instance.post('/inventory/deduct',items).then(res=>res.data)
