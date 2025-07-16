@@ -132,12 +132,12 @@ const Footer = () => {
           <h3 className="font-bold text-lg mb-2">Reach Us</h3>
           <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
             <strong>Chittorgarh</strong><br />
-            33-Subhash chowk,New cloth market, near Bharat Gas, Chittorgarh, Rajasthan 312001
+            33-Subhash Chowk, New Cloth Market, Near Bharat Gas, Chittorgarh, Rajasthan 312001
           </p>
 
           <p className="text-sm text-gray-600 dark:text-gray-300">
             <strong>Nimbahera</strong><br />
-            Nagar Palika Colony, Raza Colony, Adarsh Nagar, Nimbahera, Rajasthan 312601
+            Akrshan Tower, Savant Singh Choraha, Adarsh Nagar, Nimbahera, Rajasthan 312601
           </p>
         </div>
       </div>
