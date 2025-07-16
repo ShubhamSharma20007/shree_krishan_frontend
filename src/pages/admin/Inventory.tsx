@@ -167,6 +167,11 @@ const Inventory = () => {
     }, [createBulkRes]);
 
     const [shouldShowExpire, setShouldShowExpire] = useState<boolean[]>([]);
+    const getNextYearDate = () => {
+      const nextYear = new Date();
+      nextYear.setFullYear(nextYear.getFullYear() + 1);
+      return nextYear.toISOString().split('T')[0];
+    };
 
     console.log(shouldShowExpire);
     return (
@@ -258,8 +263,12 @@ const Inventory = () => {
                       disabled={!shouldShowExpire[0]}
                       type="date"
                       className="px-3"
+                      value={
+                        shouldShowExpire[0] &&
+                           getNextYearDate()
+                      }
                       onChange={(e) => updateRow(0, "expDate", e.target.value)}
-                      required
+                      required={shouldShowExpire[0]}
                     />
                   </div>
 
@@ -375,12 +384,16 @@ const Inventory = () => {
                         id={`expDate-${index + 1}`}
                         className="px-3"
                         type="date"
-                        disabled={!shouldShowExpire[index + 1]}
+                        disabled={!shouldShowExpire[index+1]}
                         name={`expDate-${index + 1}`}
+                        value={
+                          shouldShowExpire[index + 1] &&
+                             getNextYearDate()
+                        }
                         onChange={(e) =>
                           updateRow(index + 1, "expDate", e.target.value)
                         }
-                        required
+                        required={shouldShowExpire[index]}
                       />
                     </div>
 
