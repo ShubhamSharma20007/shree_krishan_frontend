@@ -1,8 +1,18 @@
-import AgGridTable from '@/agGrid/table';
-import { Button } from '@/components/ui/button';
-import type { AgGridReactProps, CustomCellRendererProps } from 'ag-grid-react';
-import { Edit2Icon, LoaderCircle, LoaderIcon, PlusCircle, Trash2Icon, TrendingDown, TrendingUp, X, XCircle } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react'
+import AgGridTable from "@/agGrid/table";
+import { Button } from "@/components/ui/button";
+import type { AgGridReactProps, CustomCellRendererProps } from "ag-grid-react";
+import {
+  Edit2Icon,
+  LoaderCircle,
+  LoaderIcon,
+  PlusCircle,
+  Trash2Icon,
+  TrendingDown,
+  TrendingUp,
+  X,
+  XCircle,
+} from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -12,15 +22,15 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import SearchableDropdown from 'react-select'
-import { Label } from '@/components/ui/label';
-import { useProducts } from '@/context/productContext';
-import InventoryServiceInstance from '../../../service/inventory.service';
-import { useFetch } from '@/hooks/useFetch';
-import toast from 'react-hot-toast';
-import ProductPartServiceInstance from '../../../service/part.service';
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import SearchableDropdown from "react-select";
+import { Label } from "@/components/ui/label";
+import { useProducts } from "@/context/productContext";
+import InventoryServiceInstance from "../../../service/inventory.service";
+import { useFetch } from "@/hooks/useFetch";
+import toast from "react-hot-toast";
+import ProductPartServiceInstance from "../../../service/part.service";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -31,76 +41,93 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-
+} from "@/components/ui/alert-dialog";
 
 const Inventory = () => {
   const [products, _] = useProducts();
-  const [inventory, setInventory] = useState<any>([])
-  const { fn: geInv, data: getInvRes, loading: invLoading } = useFetch(InventoryServiceInstance.getInventoryProduct)
-  const [showHandleDelete, setShowHandleDelete] = useState(false)
+  const [inventory, setInventory] = useState<any>([]);
+  const {
+    fn: geInv,
+    data: getInvRes,
+    loading: invLoading,
+  } = useFetch(InventoryServiceInstance.getInventoryProduct);
+  const [showHandleDelete, setShowHandleDelete] = useState(false);
   const [selectedInventory, setSelectedInventory] = useState<any>(null);
   const [isUpdateOpen, setIsUpdateOpen] = useState(false);
-  const { fn: deleteInventory, data: deleteInventoryRes, loading: deleteInventoryLoading, setData } = useFetch(InventoryServiceInstance.deleteInventoryProduct)
+  const {
+    fn: deleteInventory,
+    data: deleteInventoryRes,
+    loading: deleteInventoryLoading,
+    setData,
+  } = useFetch(InventoryServiceInstance.deleteInventoryProduct);
   useEffect(() => {
     (async () => {
       try {
-        await geInv()
+        await geInv();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    })()
-  }, [])
+    })();
+  }, []);
   useEffect(() => {
-    console.log(inventory)
+    console.log(inventory);
     if (getInvRes) {
       const transformedData = getInvRes.map((item: any) => ({
         ...item,
-        productId: item?.productId?._id || '',
-        productName: item?.productId?.itemName || '',
-        productPartId: item?.productPartId?._id || '',
-        productPartName: item?.productPartId?.partName || '',
-        'Created On': new Date(item?.createdAt),
+        productId: item?.productId?._id || "",
+        productName: item?.productId?.itemName || "",
+        productPartId: item?.productPartId?._id || "",
+        productPartName: item?.productPartId?.partName || "",
+        "Created On": new Date(item?.createdAt),
       }));
       setInventory(transformedData);
     }
   }, [getInvRes]);
   //       ****************************************************     //
 
-
-  const AddInventory = ({ setInventory }: { setInventory: React.Dispatch<React.SetStateAction<any[]>> }) => {
+  const AddInventory = ({
+    setInventory,
+  }: {
+    setInventory: React.Dispatch<React.SetStateAction<any[]>>;
+  }) => {
     const formRef = useRef(null);
     const [open, setOpen] = useState(false);
-    const { fn: createBulkProduct, data: createBulkRes, loading: createBulkLoading } = useFetch(InventoryServiceInstance.createBulkInventoryProduct);
+    const {
+      fn: createBulkProduct,
+      data: createBulkRes,
+      loading: createBulkLoading,
+    } = useFetch(InventoryServiceInstance.createBulkInventoryProduct);
     const [inventoryRows, setInventoryRows] = useState<any>([]);
-    const { fn: getSpecificProductPartsFN, data: getSpecificProductPartsRes, loading: productSpecificPartLoading } = useFetch(ProductPartServiceInstance.getSpecificProductPart);
+    const {
+      fn: getSpecificProductPartsFN,
+      data: getSpecificProductPartsRes,
+      loading: productSpecificPartLoading,
+    } = useFetch(ProductPartServiceInstance.getSpecificProductPart);
 
     const handleSubmit = () => {
       // handle form submit
     };
 
-
-
     const handleClone = () => {
       setInventoryRows((prev: any) => [
         ...prev,
-        { productId: "", productPartId: "", expDate:"",  qty: "", remark: "" },
+        { productId: "", productPartId: "", expDate: "", qty: "", remark: "" },
       ]);
     };
 
     const specificProductParts = async (value) => {
       try {
-        await getSpecificProductPartsFN(value)
+        await getSpecificProductPartsFN(value);
       } catch (error) {
-        console.log({ error })
-
+        console.log({ error });
       }
-    }
+    };
 
     const updateRow = async (index: number, field: string, value: any) => {
-
       setInventoryRows((prev) =>
-        prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+        prev.map((item, i) =>
+          i === index ? { ...item, [field]: value } : item
+        )
       );
     };
 
@@ -112,38 +139,36 @@ const Inventory = () => {
 
     const createBulkInventoryProject = async () => {
       try {
-        await createBulkProduct(inventoryRows)
+        await createBulkProduct(inventoryRows);
       } catch (error) {
-        console.log('Errro to create bulk inventory project', error)
-
+        console.log("Errro to create bulk inventory project", error);
       }
-    }
+    };
 
-    console.log(createBulkRes, 22)
+    console.log(createBulkRes, 22);
 
     useEffect(() => {
       if (createBulkRes) {
         console.log({ createBulkRes });
         setOpen(false);
-        toast.success('Inventory created successfully');
+        toast.success("Inventory created successfully");
         setInventory((prev: any) => [
           ...prev,
           ...createBulkRes?.stockEntries.map((item: any) => ({
             ...item,
-            productId: item?.productId?._id || '',
-            productName: item?.productId?.itemName || '',
-            productPartId: item?.productPartId?._id || '',
-            productPartName: item?.productPartId?.partName || '',
-            'Created On': new Date(item?.createdAt),
+            productId: item?.productId?._id || "",
+            productName: item?.productId?.itemName || "",
+            productPartId: item?.productPartId?._id || "",
+            productPartName: item?.productPartId?.partName || "",
+            "Created On": new Date(item?.createdAt),
           })),
         ]);
       }
     }, [createBulkRes]);
 
+    const [shouldShowExpire, setShouldShowExpire] = useState<boolean[]>([]);
 
- const [shouldShowExpire, setShouldShowExpire] = useState<boolean[]>([]);
-
-console.log(shouldShowExpire)
+    console.log(shouldShowExpire);
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
@@ -152,18 +177,22 @@ console.log(shouldShowExpire)
 
         <DialogContent className="sm:max-w-[80%]">
           <form className="grid gap-4" ref={formRef} onSubmit={handleSubmit}>
-            <DialogHeader>
-              <DialogTitle>Add Inventory</DialogTitle>
-              <DialogDescription />
-            </DialogHeader>
+          <DialogHeader>
+            <DialogTitle>Add Inventory</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground mt-1">
+              <span className="font-medium">Note:</span> The <span className="font-semibold">Expiry Date</span> field will remain <span className="font-semibold">disabled</span> unless the selected <span className="font-semibold">Product Part</span> is <span className="text-blue-600 font-semibold">"Battery"</span>.
+            </DialogDescription>
+          </DialogHeader>
 
             <div className="grid gap-3">
               {/* Initial row */}
               <div className="flex items-center justify-between gap-3 customDiv">
-               <div className={`grid grid-cols-5 gap-4 w-full`}>
+                <div className={`grid grid-cols-5 gap-4 w-full`}>
                   {/* Product Select */}
                   <div>
-                    <Label htmlFor="productId" className="mb-3">Product Name</Label>
+                    <Label htmlFor="productId" className="mb-3">
+                      Product Name
+                    </Label>
                     <SearchableDropdown
                       className="capitalize"
                       placeholder={
@@ -175,7 +204,7 @@ console.log(shouldShowExpire)
                         label: item.itemName,
                       }))}
                       onChange={(option: any) => {
-                        specificProductParts(option?.value)
+                        specificProductParts(option?.value);
                         setInventoryRows([
                           {
                             productId: option?.value,
@@ -184,39 +213,45 @@ console.log(shouldShowExpire)
                             expDate: "",
                             remark: "",
                           },
-                        ])
-                      }
-                      }
-
+                        ]);
+                      }}
                     />
                   </div>
 
                   {/* Product Part Select */}
                   <div>
-                    <Label htmlFor="productPartId" className="mb-3">Product Part</Label>
+                    <Label htmlFor="productPartId" className="mb-3">
+                      Product Part
+                    </Label>
                     <SearchableDropdown
                       className="capitalize"
                       name="productPartId"
                       placeholder={
-                        window.innerWidth < 768 ? "Search" : "Select Product Part"}
-                      options={getSpecificProductPartsRes?.productParts?.map((item: any) => ({
-                        value: item._id,
-                        label: item.partName,
-                      }))}
-                      onChange={(option: any) =>{
-                         const isBattery = option.label.toLowerCase() === 'battery';
-                      const updatedVisibility = [...shouldShowExpire];
-                      updatedVisibility[0] = !!isBattery;
-                      setShouldShowExpire(updatedVisibility);
-                      updateRow(0, "productPartId", option?.value);
+                        window.innerWidth < 768
+                          ? "Search"
+                          : "Select Product Part"
                       }
-                    }
+                      options={getSpecificProductPartsRes?.productParts?.map(
+                        (item: any) => ({
+                          value: item._id,
+                          label: item.partName,
+                        })
+                      )}
+                      onChange={(option: any) => {
+                        const isBattery =
+                          option.label.toLowerCase() === "battery";
+                        const updatedVisibility = [...shouldShowExpire];
+                        updatedVisibility[0] = !!isBattery;
+                        setShouldShowExpire(updatedVisibility);
+                        updateRow(0, "productPartId", option?.value);
+                      }}
                     />
                   </div>
 
-  
                   <div className="flex flex-col justify-between">
-                    <Label htmlFor="expireDate" className="mb-3">Expiry Date</Label>
+                    <Label htmlFor="expireDate" className="mb-3">
+                      Expiry Date
+                    </Label>
                     <Input
                       id="expireDate"
                       name="expDate"
@@ -228,10 +263,12 @@ console.log(shouldShowExpire)
                     />
                   </div>
 
-                   <div className='flex flex-col justify-between'>
+                  <div className="flex flex-col justify-between">
                     <div>
                       <div>
-                        <Label htmlFor="qty" className="mb-3">Quantity</Label>
+                        <Label htmlFor="qty" className="mb-3">
+                          Quantity
+                        </Label>
                         <Input
                           id="qty"
                           name="qty"
@@ -243,8 +280,10 @@ console.log(shouldShowExpire)
                       </div>
                     </div>
                   </div>
-                  <div className='flex flex-col justify-between'>
-                    <Label htmlFor="remark" className="mb-3">Remark</Label>
+                  <div className="flex flex-col justify-between">
+                    <Label htmlFor="remark" className="mb-3">
+                      Remark
+                    </Label>
                     <Input
                       id="remark"
                       name="remark"
@@ -254,18 +293,26 @@ console.log(shouldShowExpire)
                     />
                   </div>
                 </div>
-                <PlusCircle className="mt-2 cursor-pointer" onClick={handleClone} />
+                <PlusCircle
+                  className="mt-2 cursor-pointer"
+                  onClick={handleClone}
+                />
               </div>
 
               {/* Cloned rows */}
               {inventoryRows.slice(1).map((row, index) => (
-                <div key={index} className="flex items-center justify-between gap-3 customDiv">
+                <div
+                  key={index}
+                  className="flex items-center justify-between gap-3 customDiv"
+                >
                   {/* <div className="grid grid-cols-4 gap-4 w-full"> */}
                   <div className={`grid grid-cols-5 gap-4 w-full`}>
                     <div>
                       <SearchableDropdown
                         className="capitalize"
-                        placeholder={window.innerWidth < 768 ? "Search" : "Select Product"}
+                        placeholder={
+                          window.innerWidth < 768 ? "Search" : "Select Product"
+                        }
                         name={`productId-${index + 1}`}
                         options={products.map((item: any) => ({
                           value: item._id,
@@ -277,14 +324,13 @@ console.log(shouldShowExpire)
                               value: item._id,
                               label: item.itemName,
                             }))
-                            .find((option) => option.value === row.productId) || null
+                            .find((option) => option.value === row.productId) ||
+                          null
                         }
                         onChange={(option: any) => {
-                          specificProductParts(option?.value)
-                          updateRow(index + 1, "productId", option?.value)
-                        }
-
-                        }
+                          specificProductParts(option?.value);
+                          updateRow(index + 1, "productId", option?.value);
+                        }}
                       />
                     </div>
 
@@ -292,44 +338,53 @@ console.log(shouldShowExpire)
                       <SearchableDropdown
                         className="capitalize"
                         name={`productPartId-${index + 1}`}
-                        placeholder={window.innerWidth < 768 ? "Search" : "Select Product Part"}
-                        options={getSpecificProductPartsRes?.productParts?.map((item: any) => ({
-                          value: item._id,
-                          label: item.partName,
-                        }))}
+                        placeholder={
+                          window.innerWidth < 768
+                            ? "Search"
+                            : "Select Product Part"
+                        }
+                        options={getSpecificProductPartsRes?.productParts?.map(
+                          (item: any) => ({
+                            value: item._id,
+                            label: item.partName,
+                          })
+                        )}
                         value={
-                          getSpecificProductPartsRes
-                            ?.productParts?.map((item: any) => ({
+                          getSpecificProductPartsRes?.productParts
+                            ?.map((item: any) => ({
                               value: item._id,
                               label: item.partName,
                             }))
-                            .find((option) => option.value === row.productPartId) || null
+                            .find(
+                              (option) => option.value === row.productPartId
+                            ) || null
                         }
-                        onChange={(option: any) =>{
-                            const isBattery = option.label.toLowerCase() === 'battery';
-                      const updatedVisibility = [...shouldShowExpire];
-                      updatedVisibility[index+1] = !!isBattery;
-                      setShouldShowExpire(updatedVisibility);
-                      updateRow(index + 1, "productPartId", option?.value)
-                        }
-                        }
+                        onChange={(option: any) => {
+                          const isBattery =
+                            option.label.toLowerCase() === "battery";
+                          const updatedVisibility = [...shouldShowExpire];
+                          updatedVisibility[index + 1] = !!isBattery;
+                          setShouldShowExpire(updatedVisibility);
+                          updateRow(index + 1, "productPartId", option?.value);
+                        }}
                       />
                     </div>
 
-                    <div className='flex flex-col justify-between'>
-                        <Input
-                          id={`expDate-${index+1}`}
-                          className='px-3'
-                          type='date'
-                          disabled={!shouldShowExpire[index+1]}
-                          name={`expDate-${index+1}`}
-                          onChange={(e) => updateRow(index + 1, "expDate", e.target.value)}
-                          required
-                        />
-                  
-                  </div>
+                    <div className="flex flex-col justify-between">
+                      <Input
+                        id={`expDate-${index + 1}`}
+                        className="px-3"
+                        type="date"
+                        disabled={!shouldShowExpire[index + 1]}
+                        name={`expDate-${index + 1}`}
+                        onChange={(e) =>
+                          updateRow(index + 1, "expDate", e.target.value)
+                        }
+                        required
+                      />
+                    </div>
 
-                    <div className='flex flex-col justify-between'>
+                    <div className="flex flex-col justify-between">
                       <Input
                         id={`qty-${index + 1}`}
                         name={`qty-${index + 1}`}
@@ -337,36 +392,54 @@ console.log(shouldShowExpire)
                         placeholder="e.g 1"
                         required
                         value={row.qty}
-                        onChange={(e) => updateRow(index + 1, "qty", e.target.value)}
+                        onChange={(e) =>
+                          updateRow(index + 1, "qty", e.target.value)
+                        }
                       />
                     </div>
 
-
-                    <div className='flex flex-col justify-between'>
+                    <div className="flex flex-col justify-between">
                       <Input
                         id={`remark-${index + 1}`}
                         name={`remark-${index + 1}`}
                         placeholder="Remark..."
                         required
                         value={row.remark}
-                        onChange={(e) => updateRow(index + 1, "remark", e.target.value)}
+                        onChange={(e) =>
+                          updateRow(index + 1, "remark", e.target.value)
+                        }
                       />
                     </div>
                   </div>
 
-                  <XCircle className="mt-2 cursor-pointer" onClick={() => removeElement(index + 1)} />
+                  <XCircle
+                    className="mt-2 cursor-pointer"
+                    onClick={() => removeElement(index + 1)}
+                  />
                 </div>
               ))}
             </div>
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                >
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="button" onClick={createBulkInventoryProject} disabled={createBulkLoading}>
-                {createBulkLoading ? <LoaderCircle className="animate-spin" /> : "Create"}
+              <Button
+                type="button"
+                onClick={createBulkInventoryProject}
+                disabled={createBulkLoading}
+              >
+                {createBulkLoading ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  "Create"
+                )}
               </Button>
             </DialogFooter>
           </form>
@@ -374,8 +447,6 @@ console.log(shouldShowExpire)
       </Dialog>
     );
   };
-
-
 
   const UpdateInventoryDialog = ({
     open,
@@ -388,140 +459,187 @@ console.log(shouldShowExpire)
     data: any;
     products: any[];
   }) => {
-    const [productId, setProductId] = useState(data?.productId || '');
-    const [productPartId, setProductPartId] = useState(data?.productPartId || '');
-    const [qty, setQty] = useState(data?.qty || '')
-    const [date,setDate] = useState(data?.expDate || '');
-    const [remark, setRemark] = useState(data?.remark || '');
-    const { fn: updateInvFn, data: updateInvRes, loading: updateInvLoading } = useFetch(InventoryServiceInstance.updateInventoryProduct)
+    const [productId, setProductId] = useState(data?.productId || "");
+    const [productPartId, setProductPartId] = useState(
+      data?.productPartId || ""
+    );
+    const [qty, setQty] = useState(data?.qty || "");
+    const [date, setDate] = useState(data?.expDate || "");
+    const [remark, setRemark] = useState(data?.remark || "");
+    const {
+      fn: updateInvFn,
+      data: updateInvRes,
+      loading: updateInvLoading,
+    } = useFetch(InventoryServiceInstance.updateInventoryProduct);
 
- const [shouldShowExpire, setShouldShowExpire] = useState<any>({});
+    const [shouldShowExpire, setShouldShowExpire] = useState<any>({});
     const updateInventoryQty = async () => {
       try {
-        await updateInvFn(data._id, qty)
+        await updateInvFn(data._id, qty);
       } catch (error) {
-        console.log('Error during update inventory', error)
+        console.log("Error during update inventory", error);
       }
     };
     useEffect(() => {
       if (updateInvRes) {
-        toast.success('Inventory updated successfully')
+        toast.success("Inventory updated successfully");
         setInventory((prev: any) => {
-          const findIndex = prev.findIndex((item: any) => item._id === updateInvRes._id);
+          const findIndex = prev.findIndex(
+            (item: any) => item._id === updateInvRes._id
+          );
           if (findIndex !== -1) {
             prev[findIndex].qty = updateInvRes.qty;
           }
           return [...prev];
         });
-        setOpen(false)
+        setOpen(false);
       }
-    }, [updateInvRes])
+    }, [updateInvRes]);
 
-    const { fn: getParts, data: partOptions } = useFetch(ProductPartServiceInstance.getSpecificProductPart);;
+    const { fn: getParts, data: partOptions } = useFetch(
+      ProductPartServiceInstance.getSpecificProductPart
+    );
     useEffect(() => {
       if (productId) {
         getParts(productId);
       }
     }, [productId]);
 
-    console.log(partOptions, 12)
+    console.log(partOptions, 12);
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="sm:max-w-[80%]">
           <DialogHeader>
             <DialogTitle>Update Inventory</DialogTitle>
-            <DialogDescription>* Only Allowed Quantity field Update</DialogDescription>
+            <DialogDescription>
+              * Only Allowed Quantity field Update
+            </DialogDescription>
           </DialogHeader>
 
-
-
           <div className="flex items-center justify-between gap-3">
-            <div className={`grid ${date ? 'grid-cols-5' :'grid-cols-4'} gap-4 w-full`}>
+            <div
+              className={`grid ${
+                date ? "grid-cols-5" : "grid-cols-5"
+              } gap-4 w-full`}
+            >
               {/* Product Select */}
               <div>
-                <Label htmlFor="productId" className="mb-3">Product Name</Label>
+                <Label htmlFor="productId" className="mb-3">
+                  Product Name
+                </Label>
                 <SearchableDropdown
                   isDisabled
-                  className='capitalize'
+                  className="capitalize"
                   placeholder=""
-                  options={products.map((p) => ({ value: p._id, label: p.itemName }))}
-                  value={products.find((p) => p._id === productId) && {
-                    value: productId,
-                    label: products.find((p) => p._id === productId).itemName,
-                  }}
+                  options={products.map((p) => ({
+                    value: p._id,
+                    label: p.itemName,
+                  }))}
+                  value={
+                    products.find((p) => p._id === productId) && {
+                      value: productId,
+                      label: products.find((p) => p._id === productId).itemName,
+                    }
+                  }
                   onChange={(e) => {
                     setProductId(e.value);
-                    setProductPartId('');
+                    setProductPartId("");
                   }}
                 />
               </div>
 
-              {/* Brand Select */}
+              {/* Product Part Select */}
               <div>
-                <Label htmlFor="productPartId" className="mb-3">Product Part</Label>
+                <Label htmlFor="productPartId" className="mb-3">
+                  Product Part
+                </Label>
                 <SearchableDropdown
                   isDisabled
-                  className='capitalize'
+                  className="capitalize"
                   placeholder=""
-                
-                  options={partOptions && partOptions?.productParts?.map((part: any) => ({ value: part._id, label: part.partName }))}
+                  options={
+                    partOptions &&
+                    partOptions?.productParts?.map((part: any) => ({
+                      value: part._id,
+                      label: part.partName,
+                    }))
+                  }
                   value={
-                    partOptions && partOptions?.productParts?.find((p: any) => p._id === productPartId) && {
+                    partOptions &&
+                    partOptions?.productParts?.find(
+                      (p: any) => p._id === productPartId
+                    ) && {
                       value: productPartId,
-                      label: partOptions?.productParts.find((p: any) => p._id === productPartId)?.partName,
+                      label: partOptions?.productParts.find(
+                        (p: any) => p._id === productPartId
+                      )?.partName,
                     }
                   }
-                  onChange={(e) =>{ 
-                    const isBattery = e.label.toLowerCase() === 'battery';
+                  onChange={(e) => {
+                    const isBattery = e.label.toLowerCase() === "battery";
                     const updatedVisibility = [...shouldShowExpire];
                     updatedVisibility[0] = !!isBattery;
                     setShouldShowExpire(updatedVisibility);
-                    setProductPartId(e.value)}}
+                    setProductPartId(e.value);
+                  }}
                 />
               </div>
-              
-          {
-            date &&             <div className="flex flex-col justify-between">
-    <Label htmlFor="expireDate" className="mb-3">Expiry Date</Label>
-    <Input
-      id="expireDate"
-      name="expDate"
-      disabled={!date.length}
-      value={new Date(date).toISOString().split('T')[0] || new Date().toISOString().split('T')[0] }
-      type="date"
-      className="px-3"
-      onChange={(e) => setDate( e.target.value)}
-      required
-    />
-  </div>
-          }
 
+  
+              <div className="flex flex-col justify-between">
+              <Label htmlFor="expireDate" className="mb-3">
+                Expiry Date
+              </Label>
+              <Input
+                id="expireDate"
+                name="expDate"
+                disabled
+                value={
+                  date
+                    ? new Date(date).toISOString().split("T")[0]
+                    : ""
+                }
+                type="date"
+                className="px-3"
+                onChange={(e) => setDate(e.target.value)}
+                required
+              />
+            </div>
 
-              <div className='flex flex-col justify-between'>
-                <Label htmlFor="qty" className="mb-3">Quantity</Label>
-                <Input type="number" value={qty} onChange={(e) => setQty(e.target.value)} />
+              <div className="flex flex-col justify-between">
+                <Label htmlFor="qty" className="mb-3">
+                  Quantity
+                </Label>
+                <Input
+                  type="number"
+                  value={qty}
+                  onChange={(e) => setQty(e.target.value)}
+                />
               </div>
 
-              
-              <div className='flex flex-col justify-between'>
-                <Label htmlFor="remark" className="mb-3">Remark</Label>
-                <Input value={remark}
+              <div className="flex flex-col justify-between">
+                <Label htmlFor="remark" className="mb-3">
+                  Remark
+                </Label>
+                <Input
+                  value={remark}
                   disabled
-                  onChange={(e) => setRemark(e.target.value)} />
+                  onChange={(e) => setRemark(e.target.value)}
+                />
               </div>
             </div>
           </div>
-
 
           <DialogFooter className="mt-4">
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
             <Button onClick={updateInventoryQty}>
-              {
-                updateInvLoading ? <LoaderIcon className='animate-spin' /> : 'Update'
-              }
-
+              {updateInvLoading ? (
+                <LoaderIcon className="animate-spin" />
+              ) : (
+                "Update"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -529,44 +647,61 @@ console.log(shouldShowExpire)
     );
   };
 
-
-
   const DeductInventory = () => {
     const formRef = useRef(null);
     const [open, setOpen] = useState(false);
     const [deductInventoryRows, setDeductInventoryRows] = useState([
-      { productId: "", productPartId: "", expDate:"", qty: "", remark: "" }
+      { productId: "", productPartId: "", expDate: "", qty: "", remark: "" },
     ]);
 
-    const [productPartOptions, setProductPartOptions] = useState<Record<number, any[]>>({});
-    const [expDateOptions, setExpDateOptions] = useState<Record<number, any[]>>({});
-    console.log(expDateOptions,'expdates')
-    const [stockQuantities, setStockQuantities] = useState<Record<number, number>>({}); 
-    const [expDateStockQuantities, setExpDateStockQuantities] = useState<Record<number, number>>({});
-    const { fn: deductProductFn, data: deductProductRes, loading: deductProductLoading } = useFetch(InventoryServiceInstance.deductProductName);
+    const [productPartOptions, setProductPartOptions] = useState<
+      Record<number, any[]>
+    >({});
+    const [expDateOptions, setExpDateOptions] = useState<Record<number, any[]>>(
+      {}
+    );
+    console.log(expDateOptions, "expdates");
+    const [stockQuantities, setStockQuantities] = useState<
+      Record<number, number>
+    >({});
+    const [expDateStockQuantities, setExpDateStockQuantities] = useState<
+      Record<number, number>
+    >({});
+    const {
+      fn: deductProductFn,
+      data: deductProductRes,
+      loading: deductProductLoading,
+    } = useFetch(InventoryServiceInstance.deductProductName);
 
-    const { fn: deductInventoryFn, data: deductInventoryRes, loading: deductInventoryLoading } = useFetch(InventoryServiceInstance.deductInventory);
+    const {
+      fn: deductInventoryFn,
+      data: deductInventoryRes,
+      loading: deductInventoryLoading,
+    } = useFetch(InventoryServiceInstance.deductInventory);
 
-    const { fn: deductExpDateFn, data: deductExpDateRes, loading: deductExpDateLoading } = useFetch(InventoryServiceInstance.deductExpDate);
+    const {
+      fn: deductExpDateFn,
+      data: deductExpDateRes,
+      loading: deductExpDateLoading,
+    } = useFetch(InventoryServiceInstance.deductExpDate);
 
     useEffect(() => {
       deductProductFn();
     }, []);
 
-  
-
     const handleClone = () => {
-     
       setDeductInventoryRows((prev) => [
         ...prev,
-        { productId: "", productPartId: "", expDate:"", qty: "", remark: "" },
+        { productId: "", productPartId: "", expDate: "", qty: "", remark: "" },
       ]);
     };
-     console.log(deductInventoryRows, 1111)
+    console.log(deductInventoryRows, 1111);
 
     const updateRow = (index, field, value) => {
       setDeductInventoryRows((prev) =>
-        prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+        prev.map((item, i) =>
+          i === index ? { ...item, [field]: value } : item
+        )
       );
     };
 
@@ -576,13 +711,15 @@ console.log(shouldShowExpire)
       setDeductInventoryRows(newRows);
     };
 
-
     const handleProductChange = async (option, index) => {
       updateRow(index, "productId", option?.value);
 
       if (option?.value) {
         try {
-          const parts = await InventoryServiceInstance.deductProductPartNameById(option.value);
+          const parts =
+            await InventoryServiceInstance.deductProductPartNameById(
+              option.value
+            );
           setProductPartOptions((prev) => ({
             ...prev,
             [index]: parts || [],
@@ -607,10 +744,20 @@ console.log(shouldShowExpire)
       const { productId } = deductInventoryRows[index];
       if (productId && option?.value) {
         try {
-          const res = await InventoryServiceInstance.calculateStockQuanty(productId, option.value, '');
-          setStockQuantities((prev) => ({ ...prev, [index]: res?.stockQuantity || 0 }));
+          const res = await InventoryServiceInstance.calculateStockQuanty(
+            productId,
+            option.value,
+            ""
+          );
+          setStockQuantities((prev) => ({
+            ...prev,
+            [index]: res?.stockQuantity || 0,
+          }));
 
-          const expDateRes = await InventoryServiceInstance.deductExpDate(productId, option.value);
+          const expDateRes = await InventoryServiceInstance.deductExpDate(
+            productId,
+            option.value
+          );
           setExpDateOptions((prev) => ({ ...prev, [index]: expDateRes || [] }));
         } catch (error) {
           console.error("Error fetching stock quantity", error);
@@ -624,8 +771,15 @@ console.log(shouldShowExpire)
       const { productId, productPartId } = deductInventoryRows[index];
       if (productId && productPartId && option?.value) {
         try {
-          const res = await InventoryServiceInstance.calculateStockQuanty(productId,productPartId, option.value);
-          setExpDateStockQuantities((prev) => ({ ...prev, [index]: res?.stockQuantity || 0 }));
+          const res = await InventoryServiceInstance.calculateStockQuanty(
+            productId,
+            productPartId,
+            option.value
+          );
+          setExpDateStockQuantities((prev) => ({
+            ...prev,
+            [index]: res?.stockQuantity || 0,
+          }));
         } catch (error) {
           console.error("Error fetching stock quantity", error);
         }
@@ -635,30 +789,31 @@ console.log(shouldShowExpire)
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        await deductInventoryFn(deductInventoryRows)
+        await deductInventoryFn(deductInventoryRows);
       } catch (error) {
-        console.log('Error during the deduct Inventory:', error)
+        console.log("Error during the deduct Inventory:", error);
       }
     };
 
-    console.log(deductInventoryRes, 323)
+    console.log(deductInventoryRes, 323);
     useEffect(() => {
       if (deductInventoryRes) {
-        const transformedData = deductInventoryRes?.stockEntries?.map((item: any) => {
-          return {
-            ...item,
-            productId: item?.productId?._id || '',
-            productName: item?.productId?.itemName || '',
-            productPartId: item?.productPartId?._id || '',
-            productPartName: item?.productPartId?.partName || '',
-            'Created On': new Date(item?.createdAt),
+        const transformedData = deductInventoryRes?.stockEntries?.map(
+          (item: any) => {
+            return {
+              ...item,
+              productId: item?.productId?._id || "",
+              productName: item?.productId?.itemName || "",
+              productPartId: item?.productPartId?._id || "",
+              productPartName: item?.productPartId?.partName || "",
+              "Created On": new Date(item?.createdAt),
+            };
           }
-
-        });
+        );
         setInventory((prev: any) => [...prev, ...transformedData]);
-        setOpen(false)
+        setOpen(false);
       }
-    }, [deductInventoryRes])
+    }, [deductInventoryRes]);
 
     const [shouldShowExpire, setShouldShowExpire] = useState<boolean[]>([]);
 
@@ -677,9 +832,11 @@ console.log(shouldShowExpire)
 
             <div className="grid gap-3">
               {deductInventoryRows.map((row, index) => (
-                <div key={index} className="flex items-center justify-between gap-3 customDiv">
+                <div
+                  key={index}
+                  className="flex items-center justify-between gap-3 customDiv"
+                >
                   <div className={`grid grid-cols-5 gap-4 w-full`}>
-
                     {/* Product Select */}
                     <div>
                       {index === 0 && (
@@ -690,7 +847,7 @@ console.log(shouldShowExpire)
                       <SearchableDropdown
                         className="capitalize"
                         placeholder={
-                          window.innerWidth < 768 ? '' : "Select Product"
+                          window.innerWidth < 768 ? "" : "Select Product"
                         }
                         name={`productId-${index}`}
                         value={
@@ -699,29 +856,34 @@ console.log(shouldShowExpire)
                               value: item?._id,
                               label: item?.itemName,
                             }))
-                            .find((option) => option.value === row.productId) || null
+                            .find((option) => option.value === row.productId) ||
+                          null
                         }
                         options={deductProductRes?.map((item) => ({
                           value: item?._id,
                           label: item?.itemName,
                         }))}
-                        onChange={(option) => handleProductChange(option, index)}
+                        onChange={(option) =>
+                          handleProductChange(option, index)
+                        }
                       />
                     </div>
 
                     {/* Product Part Select */}
                     <div>
                       {index === 0 && (
-                        <Label htmlFor={`productPartId-${index}`} className="mb-3">
+                        <Label
+                          htmlFor={`productPartId-${index}`}
+                          className="mb-3"
+                        >
                           Product Part
                         </Label>
                       )}
                       <SearchableDropdown
                         className="capitalize"
-                        
                         name={`productPartId-${index}`}
                         placeholder={
-                          window.innerWidth < 768 ? '' : 'Select Product Part'
+                          window.innerWidth < 768 ? "" : "Select Product Part"
                         }
                         value={
                           (productPartOptions[index] || [])
@@ -729,20 +891,24 @@ console.log(shouldShowExpire)
                               value: item?._id,
                               label: item?.partName,
                             }))
-                            .find((option) => option.value === row.productPartId) || null
+                            .find(
+                              (option) => option.value === row.productPartId
+                            ) || null
                         }
-                        options={(productPartOptions[index] || []).map((item) => ({
-                          value: item?._id,
-                          label: item?.partName,
-                        }))}
+                        options={(productPartOptions[index] || []).map(
+                          (item) => ({
+                            value: item?._id,
+                            label: item?.partName,
+                          })
+                        )}
                         onChange={(option) => {
-                          const isBattery = option.label.toLowerCase() === 'battery';
+                          const isBattery =
+                            option.label.toLowerCase() === "battery";
                           const updatedVisibility = [...shouldShowExpire];
                           updatedVisibility[index] = !!isBattery;
                           setShouldShowExpire(updatedVisibility);
-                          handleProductPartChange(option, index)
+                          handleProductPartChange(option, index);
                         }}
-                        
                       />
                       <span className="inline-block whitespace-nowrap font-semibold float-end text-[8px] md:text-[10px] mt-1 text-green-600 bg-gray-100 px-2 py-1 rounded-md">
                         Av. Qty: {stockQuantities[index] ?? 0}
@@ -761,24 +927,24 @@ console.log(shouldShowExpire)
                         isDisabled={!shouldShowExpire[index]}
                         name={`expDate-${index}`}
                         placeholder={
-                          window.innerWidth < 768 ? '' : 'Select Expiry Date'
+                          window.innerWidth < 768 ? "" : "Select Expiry Date"
                         }
                         value={
                           (expDateOptions[index] || [])
                             .map((item) => ({
                               value: item,
-                              label: new Date(item).toLocaleDateString()
+                              label: new Date(item).toLocaleDateString(),
                             }))
-                            .find((option) => option.value === row.expDate) || null
+                            .find((option) => option.value === row.expDate) ||
+                          null
                         }
                         options={(expDateOptions[index] || []).map((item) => ({
                           value: item,
                           label: new Date(item).toLocaleDateString(),
                         }))}
                         onChange={(option) => {
-                          handleExpDateChange(option, index)
+                          handleExpDateChange(option, index);
                         }}
-                        
                       />
                       <span className="inline-block whitespace-nowrap font-semibold float-end text-[8px] md:text-[10px] mt-1 text-green-600 bg-gray-100 px-2 py-1 rounded-md">
                         Av. Qty: {expDateStockQuantities[index] ?? 0}
@@ -786,7 +952,10 @@ console.log(shouldShowExpire)
                     </div>
 
                     {/* Quantity Input */}
-                    <div className='flex flex-col justify-between' style={{ marginBottom: '27px' }}>
+                    <div
+                      className="flex flex-col justify-between"
+                      style={{ marginBottom: "27px" }}
+                    >
                       {index === 0 && (
                         <Label htmlFor={`qty-${index}`} className="mb-3">
                           Quantity
@@ -801,28 +970,32 @@ console.log(shouldShowExpire)
                         value={row.qty}
                         onChange={(e: any) => {
                           const enteredQty = Number(e.target.value);
-                      
+
                           // Check if expiry date is selected
-                          const isExpDateEnabled = !!deductInventoryRows[index].expDate;
-                      
+                          const isExpDateEnabled =
+                            !!deductInventoryRows[index].expDate;
+
                           const availableQty = isExpDateEnabled
                             ? expDateStockQuantities[index] ?? 0
                             : stockQuantities[index] ?? 0;
-                      
+
                           if (enteredQty > availableQty) {
                             toast.error(
                               `Quantity cannot be greater than available stock: ${availableQty}`
                             );
                             return;
                           }
-                      
+
                           updateRow(index, "qty", enteredQty);
                         }}
                       />
                     </div>
 
                     {/* Remark Input */}
-                    <div className='flex flex-col justify-between' style={{ marginBottom: '27px' }}>
+                    <div
+                      className="flex flex-col justify-between"
+                      style={{ marginBottom: "27px" }}
+                    >
                       {index === 0 && (
                         <Label htmlFor={`remark-${index}`} className="mb-3">
                           Remark
@@ -832,17 +1005,24 @@ console.log(shouldShowExpire)
                         id={`remark-${index}`}
                         name={`remark-${index}`}
                         placeholder="Remark..."
-
                         value={row.remark}
-                        onChange={(e) => updateRow(index, "remark", e.target.value)}
+                        onChange={(e) =>
+                          updateRow(index, "remark", e.target.value)
+                        }
                       />
                     </div>
                   </div>
 
                   {index === 0 ? (
-                    <PlusCircle className="mt-2 cursor-pointer" onClick={handleClone} />
+                    <PlusCircle
+                      className="mt-2 cursor-pointer"
+                      onClick={handleClone}
+                    />
                   ) : (
-                    <XCircle className="mt-2 cursor-pointer" onClick={() => removeElement(index)} />
+                    <XCircle
+                      className="mt-2 cursor-pointer"
+                      onClick={() => removeElement(index)}
+                    />
                   )}
                 </div>
               ))}
@@ -850,12 +1030,23 @@ console.log(shouldShowExpire)
 
             <DialogFooter>
               <DialogClose asChild>
-                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setOpen(false)}
+                >
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit" disabled={deductProductLoading || deductInventoryLoading}>
-                {deductProductLoading || deductInventoryLoading ? <LoaderCircle className="animate-spin" /> : "Create"}
+              <Button
+                type="submit"
+                disabled={deductProductLoading || deductInventoryLoading}
+              >
+                {deductProductLoading || deductInventoryLoading ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  "Create"
+                )}
               </Button>
             </DialogFooter>
           </form>
@@ -863,7 +1054,6 @@ console.log(shouldShowExpire)
       </Dialog>
     );
   };
-
 
   function HandleDeleteComponent({
     showHandleDelete,
@@ -874,22 +1064,22 @@ console.log(shouldShowExpire)
     setShowHandleDelete: React.Dispatch<React.SetStateAction<boolean>>;
     data: any;
   }) {
-
     const handleDelete = async () => {
       try {
-        await deleteInventory(data._id)
+        await deleteInventory(data._id);
       } catch (error) {
-        console.log('Error during update inventory', error)
+        console.log("Error during update inventory", error);
       }
-    }
+    };
 
-    console.log(deleteInventoryRes, 3)
+    console.log(deleteInventoryRes, 3);
 
     useEffect(() => {
       if (deleteInventoryRes) {
-
-        setInventory((prev: any) => prev.filter((item: any) => item._id !== data._id));
-        setData(null)
+        setInventory((prev: any) =>
+          prev.filter((item: any) => item._id !== data._id)
+        );
+        setData(null);
       }
     }, [deleteInventoryRes]);
 
@@ -899,22 +1089,26 @@ console.log(shouldShowExpire)
           <AlertDialogHeader>
             <AlertDialogTitle>Do you want to delete Product?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your account
-              and remove your data from our servers.
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete} disabled={deleteInventoryLoading}>
-              {
-                deleteInventoryLoading ? <LoaderCircle className='animate-spin' /> : 'Delete'
-              }
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={deleteInventoryLoading}
+            >
+              {deleteInventoryLoading ? (
+                <LoaderCircle className="animate-spin" />
+              ) : (
+                "Delete"
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    )
-
+    );
   }
 
   const ActionButtons = (params: CustomCellRendererProps) => (
@@ -936,64 +1130,114 @@ console.log(shouldShowExpire)
           setSelectedInventory(params.data);
           setShowHandleDelete(true);
         }}
-        className="cursor-pointer" variant="destructive" size="icon" title="Delete">
+        className="cursor-pointer"
+        variant="destructive"
+        size="icon"
+        title="Delete"
+      >
         <Trash2Icon />
       </Button>
     </div>
   );
 
-
   const QuantityComponent = (params: CustomCellRendererProps) => {
-    if (params.data.stockType.toLowerCase() === 'out') {
-      return <div className='flex items-center gap-3 text-red-500'>
-        <span className='text'>{params.data.qty}</span>
-        <TrendingUp />
-      </div>
+    if (params.data.stockType.toLowerCase() === "out") {
+      return (
+        <div className="flex items-center gap-3 text-red-500">
+          <span className="text">{params.data.qty}</span>
+          <TrendingUp />
+        </div>
+      );
     } else {
-      return <div className='flex items-center gap-3 text-green-500'>
-        <span>{params.data.qty}</span>
-        <TrendingDown />
-      </div>
+      return (
+        <div className="flex items-center gap-3 text-green-500">
+          <span>{params.data.qty}</span>
+          <TrendingDown />
+        </div>
+      );
     }
-  }
+  };
 
   const RemarkComponent = (params: CustomCellRendererProps) => {
-    return params.data.remark.length > 0 ? params.data.remark : '--'
-  }
+    return params.data.remark.length > 0 ? params.data.remark : "--";
+  };
   const colDefs = [
-    { field: 'productId', hide: true },
-    { field: 'productPartId', hide: true },
-    { field: 'productName', headerName: 'Product Name', flex: 2, minWidth: 150, sortable: true, filter: true, floatingFilter: true },
-    { field: 'productPartName', headerName: 'Product Part Name', flex: 2, minWidth: 150, sortable: true, filter: true, floatingFilter: true },
-    { field: 'stockType', headerName: 'StockType', flex: 1, minWidth: 150, sortable: true, filter: true, floatingFilter: true },
-    { field: 'qty', headerName: 'Quantity', flex: 1, minWidth: 150, sortable: true, filter: true, floatingFilter: true, cellRenderer: QuantityComponent },
-    { field: 'remark', headerName: 'Remark', flex: 1, minWidth: 150, sortable: true, filter: true, floatingFilter: true, cellRenderer: RemarkComponent },
+    { field: "productId", hide: true },
+    { field: "productPartId", hide: true },
     {
-      field: 'Created On',
-      flex: 1,
-      minWidth: 120,
+      field: "productName",
+      headerName: "Product Name",
+      flex: 2,
+      minWidth: 150,
       sortable: true,
-      filter: 'agDateColumnFilter',
+      filter: true,
       floatingFilter: true,
     },
     {
-      field: 'Action',
+      field: "productPartName",
+      headerName: "Product Part Name",
+      flex: 2,
+      minWidth: 150,
+      sortable: true,
+      filter: true,
+      floatingFilter: true,
+    },
+    {
+      field: "stockType",
+      headerName: "StockType",
+      flex: 1,
+      minWidth: 150,
+      sortable: true,
+      filter: true,
+      floatingFilter: true,
+    },
+    {
+      field: "qty",
+      headerName: "Quantity",
+      flex: 1,
+      minWidth: 150,
+      sortable: true,
+      filter: true,
+      floatingFilter: true,
+      cellRenderer: QuantityComponent,
+    },
+    {
+      field: "remark",
+      headerName: "Remark",
+      flex: 1,
+      minWidth: 150,
+      sortable: true,
+      filter: true,
+      floatingFilter: true,
+      cellRenderer: RemarkComponent,
+    },
+    {
+      field: "Created On",
+      flex: 1,
+      minWidth: 120,
+      sortable: true,
+      filter: "agDateColumnFilter",
+      floatingFilter: true,
+    },
+    {
+      field: "Action",
       flex: 1,
       maxWidth: 150,
       cellRenderer: ActionButtons,
-      pinned: 'right',
+      pinned: "right",
       suppressMovable: true,
     },
   ];
 
   return (
     <div className=" w-full p-3 ">
-
       <div className="flex justify-between items-center my-6">
         <h1 className="text-2xl font-semibold">Inventory</h1>
-        {
-          products && (<div className='flex gap-3 items-center'><AddInventory setInventory={setInventory} />  <DeductInventory /></div>)
-        }
+        {products && (
+          <div className="flex gap-3 items-center">
+            <AddInventory setInventory={setInventory} /> <DeductInventory />
+          </div>
+        )}
 
         {isUpdateOpen && selectedInventory && (
           <UpdateInventoryDialog
@@ -1004,7 +1248,6 @@ console.log(shouldShowExpire)
           />
         )}
 
-
         {selectedInventory && (
           <HandleDeleteComponent
             key={selectedInventory._id}
@@ -1013,13 +1256,12 @@ console.log(shouldShowExpire)
             data={selectedInventory}
           />
         )}
-
       </div>
-      <div className='overflow-y-auto'>
+      <div className="overflow-y-auto">
         <AgGridTable cols={colDefs} rows={inventory} loading={invLoading} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Inventory
+export default Inventory;
