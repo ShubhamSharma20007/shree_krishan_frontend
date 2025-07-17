@@ -150,10 +150,10 @@ const Footer = () => {
             <DialogCloseButton isOpen={isOpen} setIsOpen={setIsOpen} />
           </li>
           <li>
-            <Link to="#">Privacy Policy</Link>
+            <Link to="/privacy-policy">Privacy Policy</Link>
           </li>
           <li>
-            <Link to="#">Terms & Conditions</Link>
+            <Link to="/terms-conditions">Terms & Conditions</Link>
           </li>
         </ul>
       </div>
@@ -163,7 +163,7 @@ const Footer = () => {
         <h3 className="font-bold text-lg mb-2">Learn More</h3>
         <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
           <li>
-            <Link to="#">About Us</Link>
+            <Link to="/about-us">About Us</Link>
           </li>
           
         </ul>

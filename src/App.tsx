@@ -25,6 +25,9 @@ import NotFound from './pages/NotFound'
 import ForgotPassword from './pages/ForgotPassword'
 import VerifyOtp from './pages/VerifyOtp'
 import ResetPassword from './pages/ResetPassword'
+import Privacy from './pages/Privacy'
+import Terms from './pages/Terms'
+import AboutUs from './pages/AboutUs'
 
 
 const Loader =()=><div className='min-h-screen flex items-center justify-center w-full'>
@@ -64,6 +67,9 @@ export const App = () => {
           <Route path='/:device/:partdetail/:partId' element={<AccessoriesOverview />} />
           <Route path='/sellproduct' element={<SellProductDashboard />} />
           <Route path='/sellproduct/:device' element={<QuesAns />} />
+          <Route path='/privacy-policy' element={<Privacy />} />
+          <Route path='/terms-conditions' element={<Terms />} />
+          <Route path='/about-us' element={<AboutUs />} />
 
           <Route path='admin' element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route index path='dashboard' element={<AdminDashboard />} />
