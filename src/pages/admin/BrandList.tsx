@@ -214,7 +214,7 @@ const { fn:deleteBrandsFn, data: deleteBrandsRes, loading:deleteBrandsLoading } 
         await deleteBrandsFn(deleteId);
       } catch (err) {
         console.error(err);
-        toast.error('Error delete product');
+        toast.error('Error delete brand');
       }
   }
 
@@ -247,7 +247,7 @@ const { fn:deleteBrandsFn, data: deleteBrandsRes, loading:deleteBrandsLoading } 
   
   useEffect(()=>{
     if(deleteBrandsRes){
-      toast.success('Product deleted successfully');
+      toast.success('Brand deleted successfully');
       fetchBrands()
     }
   },[deleteBrandsRes])

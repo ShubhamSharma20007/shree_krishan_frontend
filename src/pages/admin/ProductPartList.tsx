@@ -50,10 +50,6 @@ const categoryOptions = [
   { value: "Accessories", label: "Accessories" },
   { value: "Others", label: "Others" },
 ];
-const getValidDate = (date: any) => {
-  const parsed = new Date(date);
-  return isNaN(parsed.getTime()) ? '' : parsed.toISOString().split('T')[0];
-};
 
 
 const ProductPartList = () => {
@@ -218,7 +214,7 @@ const ProductPartList = () => {
       try {
         await createProductPartFn(formData);
       } catch (error) {
-        console.log("Error during creating brand:", error);
+        console.log("Error during creating part:", error);
       }
     };
 
