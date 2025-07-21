@@ -3,6 +3,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, PieChart, Pie, Cell, LineChart, Line, Legend } from 'recharts';
 import { useFetch } from '@/hooks/useFetch';
 import DashboardServiceInstance from "../../../service/dashboard.service"
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
 
@@ -31,10 +32,10 @@ console.log(dashboardData,123)
 
 
 const stats = [
-  { title: 'Total Brands', value: dashboardData?.totalBrands },
-  { title: 'Total Products', value: dashboardData?.totalProducts },
-  { title: 'Total Parts', value: dashboardData?.totalParts },
-  { title: 'Total Contacts', value: dashboardData?.totalUsers },
+  { title: 'Total Brands', value: dashboardData?.totalBrands, link: '/admin/brandlist' },
+  { title: 'Total Products', value: dashboardData?.totalProducts, link: '/admin/listing' },
+  { title: 'Total Parts', value: dashboardData?.totalParts, link:'/admin/product-part-list' },
+  { title: 'Total Contacts', value: dashboardData?.totalUsers, link: '/admin/contact-report' },
 ];
 
   const barData = dashboardData?.barData || [];
@@ -53,15 +54,17 @@ const stats = [
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
-          <Card key={index} className="rounded-2xl shadow-md p-4">
+      {stats.map((stat, index) => (
+        <Link to={stat.link} key={index}>
+          <Card className="rounded-2xl shadow-md p-4 hover:shadow-lg transition-shadow duration-200">
             <CardContent className="text-center">
               <h2 className="text-lg font-medium mb-1">{stat.title}</h2>
               <p className="text-2xl font-bold">{stat.value}</p>
             </CardContent>
           </Card>
-        ))}
-      </div>
+        </Link>
+      ))}
+    </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <Card className="rounded-2xl shadow-md p-6">
