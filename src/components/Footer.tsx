@@ -126,21 +126,39 @@ const Footer = () => {
       </div>
     </div>
 
-      {/* Section 2 - Reach Us */}
-      <div className="space-y-6 -mt-10 md:mt-0">
-        <div>
-          <h3 className="font-bold text-lg mb-2">Reach Us</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-            <strong>Chittorgarh</strong><br />
-            33-Subhash Chowk, New Cloth Market, Near Bharat Gas, Chittorgarh, Rajasthan 312001
-          </p>
+{/* Section 2 - Reach Us */}
+<div className="space-y-6 -mt-10 md:mt-0">
+  <div>
+    <h3 className="font-bold text-lg mb-2">Reach Us</h3>
 
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            <strong>Nimbahera</strong><br />
-            Akrshan Tower, Savant Singh Choraha, Adarsh Nagar, Nimbahera, Rajasthan 312601
-          </p>
-        </div>
-      </div>
+    <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+      <strong>Chittorgarh</strong><br />
+      <Link
+        to="https://maps.app.goo.gl/7ZrXPeABMRNLrNsG6"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
+      >
+        33-Subhash Chowk, New Cloth Market, Near Bharat Gas,<br />
+        Chittorgarh, Rajasthan 312001
+      </Link>
+    </p>
+
+    <p className="text-sm text-gray-600 dark:text-gray-300">
+      <strong>Nimbahera</strong><br />
+      <Link
+        to="https://maps.app.goo.gl/7hMRKfTbLEX2aWZ57"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
+      >
+        Akrshan Tower, Savant Singh Choraha, Adarsh Nagar,<br />
+        Nimbahera, Rajasthan 312601
+      </Link>
+    </p>
+  </div>
+</div>
+
 
       {/* Section 3 - Important Links */}
       <div className="space-y-4">
@@ -172,18 +190,18 @@ const Footer = () => {
         <div className="pt-4">
           <h3 className="font-bold text-lg mb-2">Follow Us</h3>
           <div className="flex space-x-4">
-            <a href="https://instagram.com" target="_blank" rel="noreferrer">
+            <Link to="https://www.instagram.com/shree_mobile_nimbahera/profilecard/?igsh=Z2d3MXN6MmZod2Zh" target="_blank" rel="noreferrer">
               <Instagram className="w-5 h-5 text-gray-700 hover:text-pink-600" />
-            </a>
-            <a href="https://facebook.com" target="_blank" rel="noreferrer">
+            </Link>
+            <Link to="#" target="_blank" rel="noreferrer">
               <Facebook className="w-5 h-5 text-gray-700 hover:text-blue-600" />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer">
+            </Link>
+            <Link to="#" target="_blank" rel="noreferrer">
               <Linkedin className="w-5 h-5 text-gray-700 hover:text-blue-700" />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noreferrer">
+            </Link>
+            <Link to="#" target="_blank" rel="noreferrer">
               <Twitter className="w-5 h-5 text-gray-700 hover:text-sky-500" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>
