@@ -1,4 +1,3 @@
-import { useLocation } from 'react-router-dom';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,7 +6,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { HashLink } from 'react-router-hash-link';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Search } from 'lucide-react';
@@ -17,22 +15,15 @@ import { VITE_BASE_URL } from '@/helper/instance';
 import { useEffect, useState } from 'react';
 import { useDebounce } from 'use-debounce';
 
-
-function useQuery() {
-  const { search } = useLocation();
-  return new URLSearchParams(search);
-}
-
 const AllBrands = () => {
-  const query = useQuery();
-  const brand = query.get('brand') || '';
   const [inputValue, setInputValue] = useState('');
   const [debouncedText] = useDebounce(inputValue, 800);
-  const {fn: getBrandsFn,data: getBrandsRes,loading: brandsLoading} = useFetch(BrandServiceInstance.getAllBrand);
+  const {fn: getBrandsFn,data: getBrandsRes,loading:brandsLoading} = useFetch(BrandServiceInstance.getAllBrand);
 
   const [brandData, setBrandData] = useState([]);
   const [allBrands, setAllBrands] = useState([]); // original data
   const [filteredBrands, setFilteredBrands] = useState([]); // search filtered data
+  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
       getBrandsFn();
@@ -52,16 +43,24 @@ const AllBrands = () => {
 
   useEffect(() => {
     const trimmed = debouncedText.trim().toLowerCase();
+
     if (!trimmed) {
-      setFilteredBrands([]);
+      setFilteredBrands(allBrands);
+      setSearching(false);
       return;
     }
 
-    const result = allBrands.filter(item =>
-      item.brandName.toLowerCase().includes(trimmed)
-    );
-    setFilteredBrands(result);
+    setSearching(true);
+
+    setTimeout(() => {
+      const result = allBrands.filter(item =>
+        item.brandName.toLowerCase().includes(trimmed)
+      );
+      setFilteredBrands(result);
+      setSearching(false); 
+    }, 100); 
   }, [debouncedText, allBrands]);
+
 
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -80,11 +79,9 @@ const AllBrands = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink asChild>
-              <HashLink smooth to="/#all_brand">
+            <BreadcrumbPage>
                 All Brands
-              </HashLink>
-            </BreadcrumbLink>
+            </BreadcrumbPage>
             </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
@@ -120,7 +117,7 @@ const AllBrands = () => {
               </div>
             ))
           ) : (
-            !brandsLoading && (
+            !brandsLoading && !searching && filteredBrands.length === 0 && debouncedText.trim() !== ''  && (
               <p className="text-center col-span-full text-muted-foreground mt-10">
                 No Brands Found
               </p>
@@ -128,6 +125,9 @@ const AllBrands = () => {
           )}
         </div>
       </div>
+        {(brandsLoading || searching) && (
+          <p className="text-center mt-10 text-foreground">Loading...</p>
+        )}
     </div>
   );
 };

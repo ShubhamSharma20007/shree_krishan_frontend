@@ -51,6 +51,14 @@ const SparePartsAndAccessories = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
+            <BreadcrumbLink href='/allBrands' className='capitalize'>All Brands</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/products?brand=${product?.brand.brandId}`} className='capitalize'>{product?.brand?.brandName}</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
             <BreadcrumbPage className='capitalize'>{product?.itemName || decodeURIComponent(device || '')}</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>

@@ -21,7 +21,7 @@ function useQuery() {
   const { search } = useLocation();
   return new URLSearchParams(search);
 }
-
+  
 const Products = () => {
   const query = useQuery();
   const brand = query.get('brand') || '';
@@ -32,6 +32,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [allProducts, setAllProducts] = useState([]); // original data
   const [filteredProducts, setFilteredProducts] = useState([]); // search filtered data
+  const [searching, setSearch] = useState(false);
 
   useEffect(() => {
     if (brand) {
@@ -55,14 +56,20 @@ const Products = () => {
   useEffect(() => {
     const trimmed = debouncedText.trim().toLowerCase();
     if (!trimmed) {
-      setFilteredProducts([]);
+      setFilteredProducts(allProducts);
+      setSearch(false);
       return;
     }
 
-    const result = allProducts.filter(item =>
-      item.name.toLowerCase().includes(trimmed)
-    );
-    setFilteredProducts(result);
+    setSearch(true);
+    setTimeout(() => {
+
+      const result = allProducts.filter(item =>
+        item.name.toLowerCase().includes(trimmed)
+      );
+      setFilteredProducts(result);
+      setSearch(false);
+    },100)
   }, [debouncedText, allProducts]);
 
   const handleInputValue = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +90,7 @@ const Products = () => {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <HashLink smooth to="/#all_brand">
+              <HashLink smooth to="/allBrands">
                 All Brands
               </HashLink>
             </BreadcrumbLink>
@@ -129,7 +136,7 @@ const Products = () => {
               </div>
             ))
           ) : (
-            !productsLoading && (
+            !productsLoading && !searching && filteredProducts.length === 0 && debouncedText.trim() !== ''  && (
               <p className="text-center col-span-full text-muted-foreground mt-10">
                 No Models Found
               </p>
@@ -137,6 +144,7 @@ const Products = () => {
           )}
         </div>
       </div>
+      {(productsLoading || searching) && <p className="text-center mt-10 text-foreground">Loading...</p>}
     </div>
   );
 };

@@ -71,7 +71,15 @@ const AccessoriesOverview = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className='capitalize'>{product?.itemName || device}</BreadcrumbPage>
+            <BreadcrumbLink href='/allBrands' className='capitalize'>All Brands</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/products?brand=${product?.brand.brandId}`} className='capitalize'>{product?.brand.brandName}</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href={`/accessories/${product?._id}`} className='capitalize'>{product?.itemName || device}</BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -87,16 +95,9 @@ const AccessoriesOverview = () => {
         <img
           src={`${VITE_BASE_URL}/uploads/${productPart.images[0]}`}
           alt={productPart.partName}
+          loading="lazy"
           className={`w-full h-auto object-contain rounded-xl ${productPart.availableQty < 1 ? 'blur-xs' : ''}`}
         />
-{/* 
-        {productPart.availableQty < 1 && (
-          <img
-            src="https://t4.ftcdn.net/jpg/02/65/83/15/360_F_265831541_RUAcAGkikMs2WJOZ40D1BzjWqyp0MRze.jpg"
-            alt="Out of Stock"
-            className="absolute top-4 left-1/2 transform -translate-x-1/2 w-16 h-16 object-contain"
-          />
-        )} */}
       </div>
       )}
 
@@ -104,7 +105,7 @@ const AccessoriesOverview = () => {
           <h2 className="text-3xl font-bold text-foreground mb-2 capitalize flex items-center gap-5">
             {productPart?.partName}
             {
-              productPart?.availableQty < 1 && <img className='h-12' src="https://t4.ftcdn.net/jpg/02/65/83/15/360_F_265831541_RUAcAGkikMs2WJOZ40D1BzjWqyp0MRze.jpg" alt="" />
+              productPart?.availableQty < 1 && <img className='h-12' loading='lazy' src="https://t4.ftcdn.net/jpg/02/65/83/15/360_F_265831541_RUAcAGkikMs2WJOZ40D1BzjWqyp0MRze.jpg" alt="" />
             }
           </h2>
           <h3 className="text-lg text-foreground/70 mb-6 capitalize">
@@ -155,7 +156,7 @@ const AccessoriesOverview = () => {
                 <h2 className='text-xl font-semibold text-foreground mb-6 capitalize'>{category}</h2>
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4'>
                   {productParts[category]
-                    .filter((p: any) => p._id !== partId) // Exclude the current part
+                    .filter((p: any) => p._id !== partId)
                     .map((item: any, i: number) => (
                       <div key={i}>
                         <a href={`/${encodeURIComponent(product.itemName)}/${encodeURIComponent(category)}/${encodeURIComponent(item._id)}`}>
