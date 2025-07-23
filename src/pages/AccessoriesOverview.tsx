@@ -14,6 +14,59 @@ import ProductPartDetailsServiceInstance from '../../service/part.service';
 import ProductPartServiceInstance from '../../service/part.service';
 import { VITE_BASE_URL } from '@/helper/instance';
 
+const compatibleProducts = [
+  {
+      "_id": "686b9ac66e7427936cbabbb7",
+      "itemName": "Samsung Galaxy S22 Ultra 5G",
+      "brand": {
+          "brandName": "Samsung",
+          "image": "1751881679115-samsung.jpeg"
+      },
+      "model": "S22 Ultra 5G",
+      "description": "good product with better durability",
+      "images": [
+          "1751882438097-Samsung_Galaxy_S22_Ultra_5G_spare_parts_accessories_by_maxbhi.jpeg"
+      ],
+      "isDeleted": false,
+      "createdAt": "2025-07-07T10:00:38.105Z",
+      "__v": 0,
+      "updatedAt": "2025-07-07T10:25:19.074Z"
+  },
+  {
+      "_id": "686b9f056e7427936cbabc06",
+      "itemName": "Samsung Galaxy S10 Plus",
+      "brand": {
+          "brandName": "Samsung",
+          "image": "1751881679115-samsung.jpeg"
+      },
+      "model": "S10 Plus",
+      "description": "good product with better durability ",
+      "images": [
+          "1751883525211-Samsung_Galaxy_S10_Plus_spare_parts_accessories_by_maxbhi.jpeg"
+      ],
+      "isDeleted": false,
+      "createdAt": "2025-07-07T10:18:45.215Z",
+      "__v": 0,
+      "updatedAt": "2025-07-07T10:25:15.264Z"
+  },
+  {
+      "_id": "686d0cb8ed23779337e11155",
+      "itemName": "Vivo V23 Pro",
+      "brand": {
+          "brandName": "Vivo",
+          "image": "1751881724764-vivo.jpeg"
+      },
+      "model": "v23 pro",
+      "description": "Vivo V23 Pro",
+      "images": [
+          "1751977144185-Vivo_V23_Pro_spare_parts_accessories_by_maxbhi.jpeg"
+      ],
+      "isDeleted": false,
+      "createdAt": "2025-07-08T12:19:04.195Z",
+      "__v": 0
+  }
+]
+
 const AccessoriesOverview = () => {
   const { device, partDetail, partId } = useParams();
 
@@ -124,18 +177,43 @@ const AccessoriesOverview = () => {
             <li>Restores your phone’s original appearance</li>
           </ul>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          {Array.isArray(productPart?.compatibleWith) && productPart.compatibleWith.length > 0&& (
+            <div className='mt-0'>
+              <h1 className='text-xl font-semibold text-foreground mb-4 capitalize'>
+                Compatible With Other Devices
+              </h1>
+
+              <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4'>
+                {productPart?.compatibleWith.map((product, i) => (
+                  <div key={i}>
+                    <a href={`/accessories/${product._id}`} className='block'>
+                      <Card className='p-2'>
+                        <img
+                          src={`${VITE_BASE_URL}/uploads/${product.images?.[0] || ''}`}
+                          alt={product.itemName}
+                          className='w-full h-15 object-contain mx-auto'
+                        />
+                      </Card>
+                      <h1 className='text-xs font-medium mt-2 text-center capitalize'>{product.itemName}</h1>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="flex flex-col sm:flex-row gap-4 mt-5">
             <a
               href={`https://wa.me/${whatsappNumber}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-1/2 py-4 rounded-full bg-green-500 hover:bg-green-600 text-white font-semibold text-lg text-center"
+              className="w-full sm:w-1/2 py-4 rounded-xl bg-green-500 hover:bg-green-600 text-white font-semibold text-lg text-center"
             >
               WhatsApp Us
             </a>
             <a
               href={`tel:${phoneNumber}`}
-              className="w-full sm:w-1/2 py-4 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-lg text-center"
+              className="w-full sm:w-1/2 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-lg text-center"
             >
               Call Us
             </a>

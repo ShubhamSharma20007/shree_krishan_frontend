@@ -25,8 +25,8 @@ import {
 } from '@/components/ui/select';
 import { VITE_BASE_URL } from '@/helper/instance';
 import toast from 'react-hot-toast';
-import BrandServiceInstance from './../../../service/brand.service';
-import ProductServiceInstance from './../../../service/product.service';
+import BrandServiceInstance from '../../../service/brand.service';
+import ProductServiceInstance from '../../../service/product.service';
 import { useFetch } from '@/hooks/useFetch';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';

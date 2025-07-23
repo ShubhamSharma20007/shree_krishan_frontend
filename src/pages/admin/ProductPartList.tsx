@@ -211,6 +211,7 @@ const ProductPartList = () => {
       formData.append('productId', selectedProductId);
       formData.append('category', category);
 
+
       try {
         await createProductPartFn(formData);
       } catch (error) {
@@ -289,14 +290,23 @@ const ProductPartList = () => {
               <Input id="brandName" name="partName" placeholder="Screen" required />
             </div>
 
-
-
+            <div className="grid gap-3">
+            <Label htmlFor="compatibleWith">Compatible With</Label>
+            <SearchableDropdown
+              name="compatibleWith[]"
+              options={
+                products.length > 0
+                  ? products.map((item: any) => ({ value: item._id, label: item.itemName }))
+                  : []
+              }
+              isMulti
+            />
+          </div>
 
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>
               <Input id="description" name="description" placeholder="Description..." required />
             </div>
-
 
             <div className="grid gap-3">
               <Label htmlFor="images">Part Image</Label>
@@ -347,6 +357,8 @@ const ProductPartList = () => {
     const [products] = useProducts();
     const [category, setCategory] = useState('');
     const [selectedProductId, setSelectedProductId] = useState('');
+    const [compatibleProducts, setCompatibleProducts] = useState<string[]>([]);
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const formData = new FormData(formRef.current as HTMLFormElement);
@@ -368,8 +380,10 @@ const ProductPartList = () => {
       if (selectedProduct) {
         setSelectedProductId(selectedProduct?.productId?._id);
         setCategory(selectedProduct?.Category);
+        setCompatibleProducts(selectedProduct?.compatibleWith || []);
       }
     }, [selectedProduct, updateProductPartRes]);
+
 
     return (
       <Dialog open={isUpdateOpen} onOpenChange={setIsUpdateOpen}>
@@ -425,6 +439,27 @@ const ProductPartList = () => {
                 required
               />
             </div>
+
+          {/* Compatible products */}
+          <div className="grid gap-3">
+            <Label>Compatible Products</Label>
+            <SearchableDropdown
+              name="compatibleWith[]"
+              className="capitalize"
+              isMulti
+              value={products
+                .filter((p:any) => compatibleProducts.includes(p._id))
+                .map((p:any) => ({ value: p._id, label: p.itemName }))}
+              options={products.map((item: any) => ({
+                value: item._id,
+                label: item.itemName,
+              }))}
+              onChange={(selected: any[]) => {
+                const ids = selected.map((s: any) => s.value);
+                setCompatibleProducts(ids);
+              }}
+            />
+          </div>
 
             <div className="grid gap-3">
               <Label htmlFor="description">Description</Label>
