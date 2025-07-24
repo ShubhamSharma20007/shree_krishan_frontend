@@ -92,69 +92,110 @@ const Inventory = () => {
   }) => {
     const formRef = useRef(null);
     const [open, setOpen] = useState(false);
+    const [inventoryRows, setInventoryRows] = useState([
+      { productId: "", productPartId: "", expDate: "", qty: "", remark: "" },
+    ]);
+  
+    const [productPartOptions, setProductPartOptions] = useState<
+      Record<number, any[]>
+    >({});
+    const [shouldShowExpire, setShouldShowExpire] = useState<boolean[]>([]);
+  
+  
     const {
-      fn: createBulkProduct,
-      data: createBulkRes,
-      loading: createBulkLoading,
+      fn: addInventory,
+      data: addInventoryRes,
+      loading: addingInventory,
     } = useFetch(InventoryServiceInstance.createBulkInventoryProduct);
-    const [inventoryRows, setInventoryRows] = useState<any>([]);
-    const {
-      fn: getSpecificProductPartsFN,
-      data: getSpecificProductPartsRes,
-      loading: productSpecificPartLoading,
-    } = useFetch(ProductPartServiceInstance.getSpecificProductPart);
-
-    const handleSubmit = () => {
-      // handle form submit
-    };
-
+  
+  
     const handleClone = () => {
-      setInventoryRows((prev: any) => [
+      setInventoryRows((prev) => [
         ...prev,
         { productId: "", productPartId: "", expDate: "", qty: "", remark: "" },
       ]);
     };
-
-    const specificProductParts = async (value) => {
-      try {
-        await getSpecificProductPartsFN(value);
-      } catch (error) {
-        console.log({ error });
-      }
-    };
-
-    const updateRow = async (index: number, field: string, value: any) => {
-      setInventoryRows((prev) =>
-        prev.map((item, i) =>
-          i === index ? { ...item, [field]: value } : item
-        )
-      );
-    };
-
-    const removeElement = (idx: number) => {
+  
+    const removeElement = (idx) => {
       const newRows = [...inventoryRows];
       newRows.splice(idx, 1);
       setInventoryRows(newRows);
     };
-
-    const createBulkInventoryProject = async () => {
+  
+    const updateRow = (index, field, value) => {
+      setInventoryRows((prev) =>
+        prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+      );
+    };
+  
+    const handleProductChange = async (option, index) => {
+      updateRow(index, "productId", option?.value);
+      updateRow(index, "productPartId", "");
+      setShouldShowExpire((prev) => {
+        const newExpire = [...prev];
+        newExpire[index] = false;
+        return newExpire;
+      });
+  
+      if (option?.value) {
+        try {
+          const parts = await ProductPartServiceInstance.getSpecificProductPart(
+            option.value
+          );
+          console.log(parts,234)
+          setProductPartOptions((prev) => ({
+            ...prev,
+            [index]: parts.productParts || [],
+          }));
+        } catch (error) {
+          console.error("Failed to fetch product parts:", error);
+        }
+      } else {
+        setProductPartOptions((prev) => ({ ...prev, [index]: [] }));
+      }
+    };
+  
+    const handleProductPartChange = (option, index) => {
+      updateRow(index, "productPartId", option?.value);
+  
+      const isBattery = option.label.toLowerCase() === "battery";
+      setShouldShowExpire((prev) => {
+        const updated = [...prev];
+        updated[index] = isBattery;
+        return updated;
+      });
+  
+      // Reset expiry date if it's not battery
+      if (!isBattery) {
+        updateRow(index, "expDate", "");
+      } else {
+        updateRow(index, "expDate", getNextYearDate());
+      }
+    };
+  
+    const getNextYearDate = () => {
+      const today = new Date();
+      const nextYear = new Date(today.setFullYear(today.getFullYear() + 1));
+      return nextYear.toISOString().split("T")[0];
+    };
+  
+    const handleSubmit = async (e) => {
+      e.preventDefault();
       try {
-        await createBulkProduct(inventoryRows);
+        await addInventory(inventoryRows);
+        setOpen(false);
       } catch (error) {
-        console.log("Errro to create bulk inventory project", error);
+        console.log("Error adding inventory:", error);
       }
     };
 
-    console.log(createBulkRes, 22);
-
     useEffect(() => {
-      if (createBulkRes) {
-        console.log({ createBulkRes });
+      if (addInventoryRes) {
         setOpen(false);
         toast.success("Inventory created successfully");
         setInventory((prev: any) => [
           ...prev,
-          ...createBulkRes?.stockEntries.map((item: any) => ({
+          ...addInventoryRes?.stockEntries.map((item: any) => ({
             ...item,
             productId: item?.productId?._id || "",
             productName: item?.productId?.itemName || "",
@@ -164,294 +205,165 @@ const Inventory = () => {
           })),
         ]);
       }
-    }, [createBulkRes]);
+    }, [addInventoryRes]);
 
-    const [shouldShowExpire, setShouldShowExpire] = useState<boolean[]>([]);
-    const getNextYearDate = () => {
-      const nextYear = new Date();
-      nextYear.setFullYear(nextYear.getFullYear() + 1);
-      return nextYear.toISOString().split('T')[0];
-    };
-
-    console.log(shouldShowExpire);
+  
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button onClick={() => setOpen(true)}>Add Inventory</Button>
         </DialogTrigger>
-
+  
         <DialogContent className="sm:max-w-[80%]">
           <form className="grid gap-4" ref={formRef} onSubmit={handleSubmit}>
-          <DialogHeader>
-            <DialogTitle>Add Inventory</DialogTitle>
-            <DialogDescription className="text-sm text-muted-foreground mt-1">
-              <span className="font-medium">Note:</span> The <span className="font-semibold">Expiry Date</span> field will remain <span className="font-semibold">disabled</span> unless the selected <span className="font-semibold">Product Part</span> is <span className="text-blue-600 font-semibold">"Battery"</span>.
-            </DialogDescription>
-          </DialogHeader>
-
+            <DialogHeader>
+              <DialogTitle>Add Inventory</DialogTitle>
+              <DialogDescription />
+            </DialogHeader>
+  
             <div className="grid gap-3">
-              {/* Initial row */}
-              <div className="flex items-center justify-between gap-3 customDiv">
-                <div className={`grid grid-cols-5 gap-4 w-full`}>
-                  {/* Product Select */}
-                  <div>
-                    <Label htmlFor="productId" className="mb-3">
-                      Product Name
-                    </Label>
-                    <SearchableDropdown
-                      className="capitalize"
-                      placeholder={
-                        window.innerWidth < 768 ? "Search" : "Select Product"
-                      }
-                      name="productId"
-                      options={products.map((item: any) => ({
-                        value: item._id,
-                        label: item.itemName,
-                      }))}
-                      onChange={(option: any) => {
-                        specificProductParts(option?.value);
-                        setInventoryRows([
-                          {
-                            productId: option?.value,
-                            productPartId: "",
-                            qty: "",
-                            expDate: "",
-                            remark: "",
-                          },
-                        ]);
-                      }}
-                    />
-                  </div>
-
-                  {/* Product Part Select */}
-                  <div>
-                    <Label htmlFor="productPartId" className="mb-3">
-                      Product Part
-                    </Label>
-                    <SearchableDropdown
-                      className="capitalize"
-                      name="productPartId"
-                      placeholder={
-                        window.innerWidth < 768
-                          ? "Search"
-                          : "Select Product Part"
-                      }
-                      options={getSpecificProductPartsRes?.productParts?.map(
-                        (item: any) => ({
-                          value: item._id,
-                          label: item.partName,
-                        })
-                      )}
-                      onChange={(option: any) => {
-                        const isBattery =
-                          option.label.toLowerCase() === "battery";
-                        const updatedVisibility = [...shouldShowExpire];
-                        updatedVisibility[0] = !!isBattery;
-                        setShouldShowExpire(updatedVisibility);
-                        updateRow(0, "productPartId", option?.value);
-                      }}
-                    />
-                  </div>
-
-                  <div className="flex flex-col justify-between">
-                    <Label htmlFor="expireDate" className="mb-3">
-                      Expiry Date
-                    </Label>
-                    <Input
-                      id="expireDate"
-                      name="expDate"
-                      disabled={!shouldShowExpire[0]}
-                      type="date"
-                      className="px-3"
-                      value={
-                        shouldShowExpire[0] &&
-                           getNextYearDate()
-                      }
-                      onChange={(e) => updateRow(0, "expDate", e.target.value)}
-                      required={shouldShowExpire[0]}
-                    />
-                  </div>
-
-                  <div className="flex flex-col justify-between">
-                    <div>
-                      <div>
-                        <Label htmlFor="qty" className="mb-3">
-                          Quantity
-                        </Label>
-                        <Input
-                          id="qty"
-                          name="qty"
-                          type="number"
-                          placeholder="e.g 1"
-                          required
-                          onChange={(e) => updateRow(0, "qty", e.target.value)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex flex-col justify-between">
-                    <Label htmlFor="remark" className="mb-3">
-                      Remark
-                    </Label>
-                    <Input
-                      id="remark"
-                      name="remark"
-                      placeholder="Remark..."
-                      required
-                      onChange={(e) => updateRow(0, "remark", e.target.value)}
-                    />
-                  </div>
-                </div>
-                <PlusCircle
-                  className="mt-2 cursor-pointer"
-                  onClick={handleClone}
-                />
-              </div>
-
-              {/* Cloned rows */}
-              {inventoryRows.slice(1).map((row, index) => (
+              {inventoryRows.map((row, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between gap-3 customDiv"
                 >
-                  {/* <div className="grid grid-cols-4 gap-4 w-full"> */}
-                  <div className={`grid grid-cols-5 gap-4 w-full`}>
+                  <div className="grid grid-cols-5 gap-4 w-full">
+                    {/* Product Select */}
                     <div>
+                      {index === 0 && (
+                        <Label htmlFor={`productId-${index}`} className="mb-3">
+                          Product Name
+                        </Label>
+                      )}
                       <SearchableDropdown
                         className="capitalize"
-                        placeholder={
-                          window.innerWidth < 768 ? "Search" : "Select Product"
-                        }
-                        name={`productId-${index + 1}`}
-                        options={products.map((item: any) => ({
-                          value: item._id,
-                          label: item.itemName,
-                        }))}
+                        placeholder="Select Product"
+                        name={`productId-${index}`}
                         value={
                           products
-                            .map((item: any) => ({
+                            ?.map((item:any) => ({
                               value: item._id,
                               label: item.itemName,
                             }))
                             .find((option) => option.value === row.productId) ||
                           null
                         }
-                        onChange={(option: any) => {
-                          specificProductParts(option?.value);
-                          updateRow(index + 1, "productId", option?.value);
-                        }}
+                        options={products?.map((item:any) => ({
+                          value: item._id,
+                          label: item.itemName,
+                        }))}
+                        onChange={(option) => handleProductChange(option, index)}
                       />
                     </div>
-
+  
+                    {/* Product Part Select */}
                     <div>
+                    {index === 0 && (
+                      <Label htmlFor={`productPartId-${index}`} className="mb-3">
+                        Product Part
+                      </Label>
+                      )}
                       <SearchableDropdown
                         className="capitalize"
-                        name={`productPartId-${index + 1}`}
-                        placeholder={
-                          window.innerWidth < 768
-                            ? "Search"
-                            : "Select Product Part"
-                        }
-                        options={getSpecificProductPartsRes?.productParts?.map(
-                          (item: any) => ({
-                            value: item._id,
-                            label: item.partName,
-                          })
-                        )}
+                        placeholder="Select Product Part"
+                        name={`productPartId-${index}`}
                         value={
-                          getSpecificProductPartsRes?.productParts
-                            ?.map((item: any) => ({
+                          (productPartOptions[index] || [])
+                            .map((item) => ({
                               value: item._id,
                               label: item.partName,
                             }))
-                            .find(
-                              (option) => option.value === row.productPartId
-                            ) || null
+                            .find((option) => option.value === row.productPartId) ||
+                          null
                         }
-                        onChange={(option: any) => {
-                          const isBattery =
-                            option.label.toLowerCase() === "battery";
-                          const updatedVisibility = [...shouldShowExpire];
-                          updatedVisibility[index + 1] = !!isBattery;
-                          setShouldShowExpire(updatedVisibility);
-                          updateRow(index + 1, "productPartId", option?.value);
-                        }}
+                        options={(productPartOptions[index] || []).map((item) => ({
+                          value: item._id,
+                          label: item.partName,
+                        }))}
+                        onChange={(option) => handleProductPartChange(option, index)}
                       />
                     </div>
-
+  
+                    {/* Expiry Date */}
                     <div className="flex flex-col justify-between">
+                    {index === 0 && (
+                      <Label htmlFor={`expDate-${index}`} className="mb-3">
+                        Expiry Date
+                      </Label>
+                    )}
                       <Input
-                        id={`expDate-${index + 1}`}
-                        className="px-3"
+                        id={`expDate-${index}`}
+                        name={`expDate-${index}`}
                         type="date"
-                        disabled={!shouldShowExpire[index+1]}
-                        name={`expDate-${index + 1}`}
-                        value={
-                          shouldShowExpire[index + 1] &&
-                             getNextYearDate()
-                        }
-                        onChange={(e) =>
-                          updateRow(index + 1, "expDate", e.target.value)
-                        }
+                        className="px-3"
+                        disabled={!shouldShowExpire[index]}
+                        value={row.expDate || ""}
+                        onChange={(e) => updateRow(index, "expDate", e.target.value)}
                         required={shouldShowExpire[index]}
                       />
                     </div>
-
+  
+                    {/* Quantity */}
                     <div className="flex flex-col justify-between">
+                    {index === 0 && (
+                      <Label htmlFor={`qty-${index}`} className="mb-3">
+                        Quantity
+                      </Label>
+                    )}
                       <Input
-                        id={`qty-${index + 1}`}
-                        name={`qty-${index + 1}`}
+                        id={`qty-${index}`}
+                        name={`qty-${index}`}
                         type="number"
                         placeholder="e.g 1"
                         required
                         value={row.qty}
-                        onChange={(e) =>
-                          updateRow(index + 1, "qty", e.target.value)
-                        }
+                        onChange={(e) => updateRow(index, "qty", e.target.value)}
                       />
                     </div>
-
+  
+                    {/* Remark */}
                     <div className="flex flex-col justify-between">
+                    {index === 0 && (
+                      <Label htmlFor={`remark-${index}`} className="mb-3">
+                        Remark
+                      </Label>
+                    )}
                       <Input
-                        id={`remark-${index + 1}`}
-                        name={`remark-${index + 1}`}
+                        id={`remark-${index}`}
+                        name={`remark-${index}`}
                         placeholder="Remark..."
-                        required
                         value={row.remark}
-                        onChange={(e) =>
-                          updateRow(index + 1, "remark", e.target.value)
-                        }
+                        onChange={(e) => updateRow(index, "remark", e.target.value)}
                       />
                     </div>
                   </div>
-
-                  <XCircle
-                    className="mt-2 cursor-pointer"
-                    onClick={() => removeElement(index + 1)}
-                  />
+  
+                  {index === 0 ? (
+                    <PlusCircle
+                      className="mt-2 cursor-pointer"
+                      onClick={handleClone}
+                    />
+                  ) : (
+                    <XCircle
+                      className="mt-2 cursor-pointer"
+                      onClick={() => removeElement(index)}
+                    />
+                  )}
                 </div>
               ))}
             </div>
-
+  
             <DialogFooter>
               <DialogClose asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setOpen(false)}
-                >
+                <Button type="button" variant="outline" onClick={() => setOpen(false)}>
                   Cancel
                 </Button>
               </DialogClose>
-              <Button
-                type="button"
-                onClick={createBulkInventoryProject}
-                disabled={createBulkLoading}
-              >
-                {createBulkLoading ? (
+              <Button type="submit" disabled={addingInventory}>
+                {addingInventory ? (
                   <LoaderCircle className="animate-spin" />
                 ) : (
-                  "Create"
+                  "Add"
                 )}
               </Button>
             </DialogFooter>
